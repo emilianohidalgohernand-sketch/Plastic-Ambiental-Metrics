@@ -4,8 +4,13 @@ from dotenv import load_dotenv
 from supabase import create_client
 
 load_dotenv()
-url = os.getenv("SUPABASE_URL")
-key = os.getenv("SUPABASE_KEY") or os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+url = (os.getenv("SUPABASE_URL") or "").strip().strip('"').strip("'")
+key = (
+    os.getenv("SUPABASE_KEY")
+    or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+    or ""
+).strip().strip('"').strip("'")
 supabase = create_client(url, key)
 
 res_reg = supabase.table("registros_residuos").select("count", count="exact").execute()

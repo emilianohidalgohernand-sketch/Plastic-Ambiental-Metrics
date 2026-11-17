@@ -84,12 +84,13 @@ app.add_middleware(
 )
 
 # Inicializar ingestor de Supabase
-supabase_url = os.getenv("SUPABASE_URL")
+supabase_url = (os.getenv("SUPABASE_URL") or "").strip().strip('"').strip("'")
 supabase_key = (
     os.getenv("SUPABASE_KEY")
     or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
     or os.getenv("SUPABASE_PUBLISHABLE_KEY")
-)
+    or ""
+).strip().strip('"').strip("'")
 
 ingestor = None
 try:

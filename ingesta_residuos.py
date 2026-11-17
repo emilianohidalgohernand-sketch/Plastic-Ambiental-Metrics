@@ -1333,13 +1333,16 @@ def detect_and_extract(file_path: str, tipo_operacion: str = "ENTRADAS") -> Tupl
 class SupabaseIngestor:
     def __init__(self, url: Optional[str] = None, key: Optional[str] = None):
         load_dotenv()
-        self.url = url or os.getenv("SUPABASE_URL")
-        self.key = (
+        raw_url = url or os.getenv("SUPABASE_URL") or ""
+        raw_key = (
             key
             or os.getenv("SUPABASE_KEY")
             or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
             or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+            or ""
         )
+        self.url = raw_url.strip().strip('"').strip("'")
+        self.key = raw_key.strip().strip('"').strip("'")
 
         if not self.url or not self.key:
             raise ValueError(
