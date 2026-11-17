@@ -21,7 +21,15 @@ import openpyxl
 from fastapi.testclient import TestClient
 
 # Importar aplicación FastAPI
-from app import app, SESIONES_PRESENTACION, calcular_metricas_residuos
+from app import (
+    app,
+    SESIONES_PRESENTACION,
+    calcular_metricas_residuos,
+    create_session_token,
+    SESSION_COOKIE_NAME,
+    APP_USER,
+    APP_PASSWORD
+)
 from ingesta_residuos import (
     identificar_tipo_documento,
     extract_almacen,
@@ -35,6 +43,7 @@ from ingesta_residuos import (
 )
 
 client = TestClient(app)
+client.cookies.set(SESSION_COOKIE_NAME, create_session_token("admin"))
 
 def generar_excel_almacen_memoria() -> io.BytesIO:
     """Genera un archivo Excel sintético ligero (4 filas) de Almacén."""
@@ -489,6 +498,53 @@ class TestPlasticTradeOptimizado(unittest.TestCase):
         self.assertIn('id="contenedor-filtro-hasta"', html)
         self.assertIn('white-space: nowrap;', html)
         self.assertIn('text-overflow: ellipsis;', html)
+
+    def test_12_autenticacion_seguridad(self):
+        """Valida protección con login, cookies firmadas, Basic Auth y bloqueo 401 a rutas no autenticadas."""
+        import base64
+        anon_client = TestClient(app)
+
+        # 1. Acceso a /api/health debe ser público (200)
+        res_health = anon_client.get("/api/health")
+        self.assertEqual(res_health.status_code, 200)
+
+        # 2. Acceso a / sin cookie debe servir la pantalla de login (200 con HTML de login)
+        res_root = anon_client.get("/")
+        self.assertEqual(res_root.status_code, 200)
+        self.assertIn("Iniciar Sesión", res_root.text)
+
+        # 3. Acceso a endpoint de datos sin autenticación debe retornar 401
+        res_unauth = anon_client.get("/api/test-files")
+        self.assertEqual(res_unauth.status_code, 401)
+        self.assertIn("Acceso no autorizado", res_unauth.text)
+
+        # 4. Intento de login con contraseña incorrecta debe fallar (401)
+        res_bad_login = anon_client.post("/login", json={"username": "admin", "password": "WrongPassword123!"})
+        self.assertEqual(res_bad_login.status_code, 401)
+
+        # 5. Login con credenciales correctas debe responder 200 y establecer cookie de sesión
+        res_good_login = anon_client.post("/login", json={"username": "admin", "password": "PlasticTrade2026!"})
+        self.assertEqual(res_good_login.status_code, 200)
+        self.assertTrue(res_good_login.json().get("success"))
+        self.assertIn(SESSION_COOKIE_NAME, anon_client.cookies)
+
+        # 6. Con la cookie establecida, el acceso a datos debe ser exitoso (200)
+        res_auth = anon_client.get("/api/test-files")
+        self.assertEqual(res_auth.status_code, 200)
+
+        # 7. Prueba de acceso con HTTP Basic Auth sin cookie
+        fresh_client = TestClient(app)
+        auth_str = base64.b64encode(b"admin:PlasticTrade2026!").decode("ascii")
+        res_basic = fresh_client.get("/api/test-files", headers={"Authorization": f"Basic {auth_str}"})
+        self.assertEqual(res_basic.status_code, 200)
+
+        # 8. Prueba de cierre de sesión (/logout)
+        res_logout = anon_client.get("/logout")
+        self.assertEqual(res_logout.status_code, 200)
+        # La cookie debe ser invalidada/vaciada
+        res_after_logout = anon_client.get("/api/test-files")
+        self.assertEqual(res_after_logout.status_code, 401)
+
 
 
 if __name__ == "__main__":

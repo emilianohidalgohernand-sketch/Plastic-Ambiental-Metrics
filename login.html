@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Acceso Seguro • PLASTIC TRADE | Portal Ambiental</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pt: {
+              blue: '#0088D6',         // Azul corporativo "PLASTIC"
+              blueHover: '#0070B8',    // Azul hover
+              blueLight: '#E0F2FE',    // Contenedor suave azul
+              green: '#78BE20',        // Verde eco "TRADE"
+              greenHover: '#65A30D',   // Verde hover
+              greenLight: '#ECFCCB',   // Contenedor suave verde
+              dark: '#0F172A',         // Slate oscuro para títulos
+              muted: '#475569',        // Gris para subtítulos ("SMART PACKAGING")
+              border: '#E2E8F0',       // Bordes sutiles
+              surface: '#FFFFFF'       // Fondo de tarjetas
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .brand-font {
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 0.08em;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#F0F9FF] via-[#F8FAFC] to-[#F2FBF0] min-h-screen flex flex-col justify-between p-4 sm:p-6 md:p-10 antialiased text-pt-dark">
+
+  <!-- HEADER CON LOGOTIPO -->
+  <header class="w-full max-w-md mx-auto flex items-center justify-center py-4 mb-2">
+    <div class="flex items-center gap-4" title="Plastic Trade Smart Packaging">
+      <div class="h-20 sm:h-24 w-auto flex items-center justify-center p-2 bg-white/80 rounded-2xl border border-slate-200/60 shadow-sm backdrop-blur-sm">
+        <img 
+          src="Logo.png" 
+          alt="PLASTIC TRADE • Smart Packaging" 
+          class="h-full w-auto max-h-20 sm:max-h-24 object-contain select-none"
+          onerror="this.onerror=null; this.classList.add('hidden'); document.getElementById('logo-fallback').classList.remove('hidden');"
+        />
+        
+        <!-- Fallback si la imagen no carga -->
+        <div id="logo-fallback" class="hidden flex items-center gap-3 px-3">
+          <div class="flex flex-col">
+            <div class="brand-font text-2xl font-bold tracking-wider leading-none flex items-center">
+              <span class="text-pt-blue">PLASTIC</span>
+              <span class="text-pt-green ml-1.5">TRADE</span>
+              <span class="text-[10px] text-pt-green ml-0.5 align-super font-semibold">®</span>
+            </div>
+            <span class="text-[9px] font-bold tracking-[0.25em] text-pt-muted uppercase mt-0.5">
+              Smart Packaging
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TARJETA PRINCIPAL DE INICIO DE SESIÓN -->
+  <main class="w-full max-w-md mx-auto bg-white/95 border border-slate-200/80 rounded-[2.5rem] p-7 sm:p-10 shadow-2xl shadow-slate-200/60 backdrop-blur-md relative overflow-hidden transition-all duration-300">
+    <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pt-blue via-sky-400 to-pt-green"></div>
+
+    <!-- INSIGNIA SUPERIOR -->
+    <div class="flex items-center justify-center mb-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pt-blueLight text-pt-blue text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="shield-check" class="w-4 h-4 text-pt-blue"></i>
+        <span>Acceso Autorizado</span>
+      </div>
+    </div>
+
+    <!-- TÍTULO Y DESCRIPCIÓN -->
+    <div class="text-center mb-7">
+      <h1 class="text-2xl font-extrabold text-pt-dark tracking-tight">Iniciar Sesión</h1>
+      <p class="text-pt-muted text-xs sm:text-sm mt-1.5 leading-relaxed">
+        Ingresa tus credenciales para acceder al Portal Ambiental y Métricas de Residuos.
+      </p>
+    </div>
+
+    <!-- ALERTA DE ERROR -->
+    <div id="error-alert" class="hidden mb-5 p-3.5 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium flex items-start gap-2.5 transition-all">
+      <i data-lucide="alert-circle" class="w-4 h-4 text-rose-500 shrink-0 mt-0.5"></i>
+      <span id="error-message">Credenciales incorrectas. Por favor verifica tu usuario y contraseña.</span>
+    </div>
+
+    <!-- FORMULARIO DE ACCESO -->
+    <form id="login-form" method="POST" action="/login" class="space-y-5">
+      <!-- USUARIO -->
+      <div>
+        <label for="username" class="block text-xs font-bold uppercase tracking-wider text-pt-dark mb-1.5">
+          Usuario
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <i data-lucide="user" class="w-4 h-4"></i>
+          </div>
+          <input 
+            type="text" 
+            id="username" 
+            name="username" 
+            required 
+            autocomplete="username"
+            placeholder="admin"
+            class="w-full pl-10 pr-4 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-medium text-pt-dark placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pt-blue/30 focus:border-pt-blue transition-all"
+          />
+        </div>
+      </div>
+
+      <!-- CONTRASEÑA -->
+      <div>
+        <label for="password" class="block text-xs font-bold uppercase tracking-wider text-pt-dark mb-1.5">
+          Contraseña
+        </label>
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+            <i data-lucide="lock" class="w-4 h-4"></i>
+          </div>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            required 
+            autocomplete="current-password"
+            placeholder="••••••••••••"
+            class="w-full pl-10 pr-11 py-3 bg-slate-50/70 border border-slate-200 rounded-xl text-sm font-medium text-pt-dark placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-pt-blue/30 focus:border-pt-blue transition-all"
+          />
+          <button 
+            type="button" 
+            id="toggle-pwd" 
+            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-600 transition-colors"
+            title="Mostrar / Ocultar contraseña"
+          >
+            <i data-lucide="eye" id="eye-icon" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- BOTÓN DE INGRESO -->
+      <button 
+        type="submit" 
+        id="submit-btn"
+        class="w-full py-3.5 px-4 bg-gradient-to-r from-pt-blue to-pt-blueHover text-white rounded-xl text-sm font-bold shadow-lg shadow-pt-blue/25 hover:shadow-pt-blue/40 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 group cursor-pointer"
+      >
+        <span id="btn-text">Ingresar al Portal</span>
+        <i data-lucide="arrow-right" id="btn-icon" class="w-4 h-4 group-hover:translate-x-0.5 transition-transform"></i>
+        <svg id="btn-spinner" class="hidden animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </button>
+    </form>
+
+    <!-- NOTA DE SEGURIDAD -->
+    <div class="mt-7 pt-5 border-t border-slate-100 flex items-center justify-center gap-2 text-[11px] text-slate-400 font-medium">
+      <i data-lucide="shield" class="w-3.5 h-3.5 text-pt-green"></i>
+      <span>Sesión cifrada con cookie HTTP-Only segura</span>
+    </div>
+  </main>
+
+  <!-- PIE DE PÁGINA CORPORATIVO -->
+  <footer class="w-full max-w-md mx-auto text-center py-4 mt-2">
+    <p class="text-[11px] font-semibold text-slate-400">
+      © 2026 PLASTIC TRADE S.A. DE C.V. • Todos los derechos reservados
+    </p>
+    <p class="text-[10px] text-slate-400 mt-0.5">
+      Smart Packaging • Plataforma de Inteligencia Ambiental
+    </p>
+  </footer>
+
+  <script>
+    // Inicializar iconos
+    lucide.createIcons();
+
+    // Alternar visibilidad de contraseña
+    const togglePwd = document.getElementById('toggle-pwd');
+    const pwdInput = document.getElementById('password');
+    const eyeIcon = document.getElementById('eye-icon');
+
+    togglePwd.addEventListener('click', () => {
+      if (pwdInput.type === 'password') {
+        pwdInput.type = 'text';
+        eyeIcon.setAttribute('data-lucide', 'eye-off');
+      } else {
+        pwdInput.type = 'password';
+        eyeIcon.setAttribute('data-lucide', 'eye');
+      }
+      lucide.createIcons();
+    });
+
+    // Manejo de envío asíncrono
+    const form = document.getElementById('login-form');
+    const errorAlert = document.getElementById('error-alert');
+    const errorMsg = document.getElementById('error-message');
+    const submitBtn = document.getElementById('submit-btn');
+    const btnText = document.getElementById('btn-text');
+    const btnIcon = document.getElementById('btn-icon');
+    const btnSpinner = document.getElementById('btn-spinner');
+
+    // Verificar si viene con parámetro de error en URL (e.g. ?error=1)
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.has('error')) {
+      errorAlert.classList.remove('hidden');
+      errorMsg.textContent = 'Credenciales no válidas. Por favor vuelve a intentarlo.';
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!username || !password) {
+        errorAlert.classList.remove('hidden');
+        errorMsg.textContent = 'Por favor ingresa usuario y contraseña.';
+        return;
+      }
+
+      // Estado de carga
+      submitBtn.disabled = true;
+      btnText.textContent = 'Verificando...';
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+      errorAlert.classList.add('hidden');
+
+      try {
+        const response = await fetch('/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+          btnText.textContent = '¡Acceso concedido!';
+          // Redirigir al dashboard
+          window.location.href = '/';
+        } else {
+          const errData = await response.json().catch(() => ({}));
+          errorAlert.classList.remove('hidden');
+          errorMsg.textContent = errData.detail || 'Usuario o contraseña incorrectos. Verifica tus credenciales.';
+          submitBtn.disabled = false;
+          btnText.textContent = 'Ingresar al Portal';
+          btnIcon.classList.remove('hidden');
+          btnSpinner.classList.add('hidden');
+        }
+      } catch (err) {
+        // En caso de fallo de red, intentar envío tradicional de formulario
+        form.submit();
+      }
+    });
+  </script>
+</body>
+</html>

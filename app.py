@@ -33,7 +33,9 @@ import pandas as pd
 from pydantic import BaseModel
 
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException, Request
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
+import hmac
+import hashlib
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import uuid
@@ -113,6 +115,198 @@ try:
         print("[AVISO] OPENAI_API_KEY no detectada al inicio.")
 except Exception as e:
     print(f"[AVISO] Error al inicializar cliente OpenAI: {e}")
+
+
+# ==========================================
+# AUTENTICACIÓN Y SEGURIDAD (PLASTIC TRADE)
+# ==========================================
+APP_USER = os.getenv("APP_USER", "admin")
+APP_PASSWORD = os.getenv("APP_PASSWORD", "PlasticTrade2026!")
+SECRET_KEY = os.getenv("SECRET_KEY", "plastic-trade-secret-key-2026-ambiental-secure")
+SESSION_COOKIE_NAME = "session_token"
+
+
+def create_session_token(username: str, max_age_days: int = 7) -> str:
+    """Genera un token de sesión firmado criptográficamente con HMAC-SHA256."""
+    expires_at = int(time.time()) + (max_age_days * 86400)
+    payload = f"{username}:{expires_at}"
+    signature = hmac.new(SECRET_KEY.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256).hexdigest()
+    raw_token = f"{payload}:{signature}"
+    return base64.urlsafe_b64encode(raw_token.encode("utf-8")).decode("utf-8")
+
+
+def verify_session_token(token: str) -> Optional[str]:
+    """Verifica la firma y vigencia del token de sesión."""
+    try:
+        raw = base64.urlsafe_b64decode(token.encode("utf-8")).decode("utf-8")
+        parts = raw.split(":")
+        if len(parts) != 3:
+            return None
+        user, expires_at_str, signature = parts
+        expires_at = int(expires_at_str)
+        if time.time() > expires_at:
+            return None
+        payload = f"{user}:{expires_at}"
+        expected_sig = hmac.new(SECRET_KEY.encode("utf-8"), payload.encode("utf-8"), hashlib.sha256).hexdigest()
+        if hmac.compare_digest(signature, expected_sig):
+            return user
+        return None
+    except Exception:
+        return None
+
+
+def verify_basic_auth(auth_header: str) -> bool:
+    """Valida cabecera HTTP Basic Auth si no existe sesión en cookie."""
+    try:
+        if not auth_header or not auth_header.startswith("Basic "):
+            return False
+        encoded = auth_header.split(" ", 1)[1].strip()
+        decoded = base64.b64decode(encoded).decode("utf-8")
+        if ":" not in decoded:
+            return False
+        user, pwd = decoded.split(":", 1)
+        valid_user = os.getenv("APP_USER", "admin")
+        valid_pass = os.getenv("APP_PASSWORD", "PlasticTrade2026!")
+        return hmac.compare_digest(user.strip(), valid_user.strip()) and hmac.compare_digest(pwd, valid_pass)
+    except Exception:
+        return False
+
+
+def is_request_authenticated(request: Request) -> bool:
+    """Evalúa si la solicitud proviene de una sesión autenticada o Basic Auth."""
+    token = request.cookies.get(SESSION_COOKIE_NAME)
+    if token and verify_session_token(token):
+        return True
+    auth = request.headers.get("Authorization")
+    if auth and verify_basic_auth(auth):
+        return True
+    return False
+
+
+@app.middleware("http")
+async def security_middleware(request: Request, call_next):
+    """Protege las rutas del dashboard y endpoints de datos excepto /api/health y /login."""
+    path = request.url.path
+
+    # Rutas públicas siempre permitidas sin autenticación
+    PUBLIC_PATHS = {
+        "/api/health",
+        "/api/status",
+        "/health",
+        "/login",
+        "/api/login",
+        "/logout",
+        "/api/logout",
+        "/Logo.png",
+        "/favicon.ico"
+    }
+
+    if path in PUBLIC_PATHS or path.startswith("/static"):
+        return await call_next(request)
+
+    # Si está autenticado, continuar ejecución
+    if is_request_authenticated(request):
+        return await call_next(request)
+
+    # Si es la raíz '/' sin autenticación, servir pantalla limpia de login.html
+    if path == "/":
+        login_path = BASE_DIR / "login.html"
+        if login_path.exists():
+            return FileResponse(login_path, media_type="text/html")
+        return RedirectResponse(url="/login", status_code=303)
+
+    # Si el navegador solicita documento HTML, redirigir al login
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept:
+        return RedirectResponse(url="/login", status_code=303)
+
+    # Endpoints de API y datos: 401 Unauthorized
+    return JSONResponse(
+        status_code=401,
+        content={"detail": "Acceso no autorizado. Inicie sesión en Plastic Trade.", "authenticated": False},
+        headers={"WWW-Authenticate": 'Basic realm="Plastic Trade"'}
+    )
+
+
+class LoginPayload(BaseModel):
+    username: Optional[str] = None
+    password: Optional[str] = None
+
+
+@app.get("/login", response_class=FileResponse)
+async def serve_login(request: Request):
+    if is_request_authenticated(request):
+        return RedirectResponse(url="/", status_code=303)
+    login_path = BASE_DIR / "login.html"
+    if not login_path.exists():
+        raise HTTPException(status_code=404, detail="login.html no encontrado")
+    return FileResponse(login_path, media_type="text/html")
+
+
+@app.post("/login")
+@app.post("/api/login")
+async def login_handler(request: Request, payload: Optional[LoginPayload] = None):
+    user = ""
+    pwd = ""
+    if payload and payload.username and payload.password:
+        user = payload.username
+        pwd = payload.password
+    else:
+        try:
+            body = await request.json()
+            user = body.get("username", "")
+            pwd = body.get("password", "")
+        except Exception:
+            try:
+                form = await request.form()
+                user = form.get("username", "")
+                pwd = form.get("password", "")
+            except Exception:
+                pass
+
+    valid_user = os.getenv("APP_USER", "admin")
+    valid_pass = os.getenv("APP_PASSWORD", "PlasticTrade2026!")
+
+    if hmac.compare_digest(str(user).strip(), valid_user.strip()) and hmac.compare_digest(str(pwd), valid_pass):
+        token = create_session_token(str(user).strip())
+        accept = request.headers.get("accept", "")
+        if "text/html" in accept and "application/json" not in accept:
+            resp = RedirectResponse(url="/", status_code=303)
+        else:
+            resp = JSONResponse({"success": True, "message": "Autenticación exitosa", "user": str(user).strip()})
+
+        resp.set_cookie(
+            key=SESSION_COOKIE_NAME,
+            value=token,
+            httponly=True,
+            max_age=86400 * 7,
+            samesite="lax",
+            path="/"
+        )
+        return resp
+
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept and "application/json" not in accept:
+        return RedirectResponse(url="/login?error=1", status_code=303)
+
+    return JSONResponse(
+        status_code=401,
+        content={"detail": "Usuario o contraseña incorrectos. Verifica tus credenciales.", "success": False}
+    )
+
+
+@app.get("/logout")
+@app.post("/logout")
+@app.get("/api/logout")
+@app.post("/api/logout")
+async def logout_handler(request: Request):
+    accept = request.headers.get("accept", "")
+    if "text/html" in accept or request.method == "GET":
+        resp = RedirectResponse(url="/login", status_code=303)
+    else:
+        resp = JSONResponse({"success": True, "message": "Sesión cerrada exitosamente"})
+    resp.delete_cookie(key=SESSION_COOKIE_NAME, path="/", httponly=True)
+    return resp
 
 
 # ==========================================
