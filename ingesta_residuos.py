@@ -1331,15 +1331,20 @@ def detect_and_extract(file_path: str, tipo_operacion: str = "ENTRADAS") -> Tupl
 # GESTOR DE INGESTA SUPABASE
 # ==========================================
 class SupabaseIngestor:
-    def __init__(self):
+    def __init__(self, url: Optional[str] = None, key: Optional[str] = None):
         load_dotenv()
-        self.url = os.getenv("SUPABASE_URL")
-        self.key = os.getenv("SUPABASE_SERVICE_ROLE_KEY") or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+        self.url = url or os.getenv("SUPABASE_URL")
+        self.key = (
+            key
+            or os.getenv("SUPABASE_KEY")
+            or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+            or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+        )
 
         if not self.url or not self.key:
             raise ValueError(
-                "Credenciales de Supabase no encontradas en el archivo .env. "
-                "Asegúrate de definir SUPABASE_URL y SUPABASE_SERVICE_ROLE_KEY."
+                "Credenciales de Supabase no encontradas. "
+                "Asegúrate de definir SUPABASE_URL y SUPABASE_KEY (o SUPABASE_SERVICE_ROLE_KEY / SUPABASE_PUBLISHABLE_KEY)."
             )
 
         self.client: Client = create_client(self.url, self.key, options=ClientOptions(postgrest_client_timeout=5))

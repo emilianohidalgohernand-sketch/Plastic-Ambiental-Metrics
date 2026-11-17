@@ -84,10 +84,20 @@ app.add_middleware(
 )
 
 # Inicializar ingestor de Supabase
+supabase_url = os.getenv("SUPABASE_URL")
+supabase_key = (
+    os.getenv("SUPABASE_KEY")
+    or os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+    or os.getenv("SUPABASE_PUBLISHABLE_KEY")
+)
+
 ingestor = None
 try:
-    ingestor = SupabaseIngestor()
-    print("[SUPABASE] Conexion inicializada con exito.")
+    if supabase_url and supabase_key:
+        ingestor = SupabaseIngestor(url=supabase_url, key=supabase_key)
+        print("[SUPABASE] Conexión inicializada con éxito.")
+    else:
+        print("[AVISO] Variables de entorno de Supabase no detectadas al inicio (SUPABASE_URL o SUPABASE_KEY).")
 except Exception as e:
     print(f"[AVISO] No se pudo inicializar cliente de Supabase al inicio: {e}")
 
