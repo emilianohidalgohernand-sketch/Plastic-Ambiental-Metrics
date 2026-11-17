@@ -1,0 +1,4075 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PLASTIC TRADE • Smart Packaging | Portal Ambiental</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Iconos Lucide -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- SheetJS para exportación local instantánea de Excel (.xlsx) -->
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+  <!-- Chart.js para gráficos analíticos del Dashboard -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pt: {
+              blue: '#0088D6',         // Azul corporativo "PLASTIC"
+              blueHover: '#0070B8',    // Azul hover
+              blueLight: '#E0F2FE',    // Contenedor suave azul
+              green: '#78BE20',        // Verde eco "TRADE"
+              greenHover: '#65A30D',   // Verde hover
+              greenLight: '#ECFCCB',   // Contenedor suave verde
+              dark: '#0F172A',         // Slate oscuro para títulos
+              muted: '#475569',        // Gris para subtítulos ("SMART PACKAGING")
+              border: '#E2E8F0',       // Bordes sutiles
+              surface: '#FFFFFF'       // Fondo de tarjetas
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Rajdhani:wght@600;700&display=swap');
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .brand-font {
+      font-family: 'Rajdhani', sans-serif;
+      letter-spacing: 0.08em;
+    }
+    /* Estilos personalizados de scrollbar para tablas y chips */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F1F5F9;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94A3B8;
+    }
+    .drag-over {
+      border-color: #0088D6 !important;
+      background-color: #F0F9FF !important;
+      transform: scale(1.01);
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-[#F0F9FF] via-[#F8FAFC] to-[#F2FBF0] min-h-screen flex flex-col justify-between p-4 sm:p-6 md:p-10 antialiased text-pt-dark">
+
+  <!-- BARRA SUPERIOR CON LOGO OFICIAL PLASTIC TRADE -->
+  <header class="w-full max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 py-4 mb-4">
+    <!-- Logotipo Corporativo (Carga exacta 'Logo.png' con proporciones fijas no deformadas) -->
+    <div class="flex items-center gap-4 group cursor-pointer" onclick="volverAlHub()" title="Plastic Trade Smart Packaging">
+      <div class="h-20 sm:h-24 w-auto flex items-center justify-center p-1 bg-white/70 rounded-2xl border border-slate-200/60 shadow-sm backdrop-blur-sm transition-transform duration-300 group-hover:scale-[1.02]">
+        <img 
+          src="Logo.png" 
+          alt="PLASTIC TRADE • Smart Packaging" 
+          class="h-full w-auto max-h-20 sm:max-h-24 object-contain select-none"
+          onerror="this.onerror=null; this.classList.add('hidden'); document.getElementById('logo-fallback').classList.remove('hidden');"
+        />
+        
+        <!-- Fallback de contingencia si no se encuentra la imagen -->
+        <div id="logo-fallback" class="hidden flex items-center gap-3 px-3">
+          <div class="flex flex-col">
+            <div class="brand-font text-2xl font-bold tracking-wider leading-none flex items-center">
+              <span class="text-pt-blue">PLASTIC</span>
+              <span class="text-pt-green ml-1.5">TRADE</span>
+              <span class="text-[10px] text-pt-green ml-0.5 align-super font-semibold">®</span>
+            </div>
+            <span class="text-[9px] font-bold tracking-[0.25em] text-pt-muted uppercase mt-0.5">
+              Smart Packaging
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Indicador de Plataforma Activa y Conectividad Backend -->
+    <div class="flex items-center gap-2.5">
+      <div id="backend-status-badge" class="flex items-center gap-2 px-4 py-2 bg-white/90 border border-pt-border rounded-full shadow-sm text-xs font-semibold text-pt-muted backdrop-blur-sm">
+        <span class="w-2.5 h-2.5 rounded-full bg-pt-green animate-pulse"></span>
+        <span class="hidden sm:inline">Servidor Conectado</span>
+        <span class="sm:hidden">Online</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- ======================================================== -->
+  <!-- VISTA 01: MENÚ PRINCIPAL (HUB DE 3 TARJETAS) -->
+  <!-- ======================================================== -->
+  <main id="view-hub" class="w-full max-w-6xl mx-auto bg-white/90 border border-slate-200/80 rounded-[2.5rem] p-6 sm:p-10 md:p-14 shadow-xl shadow-slate-200/50 backdrop-blur-md transition-all duration-300">
+    
+    <!-- ENCABEZADO DE BIENVENIDA -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-100">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-pt-blueLight/60 text-pt-blue text-xs font-bold uppercase tracking-wider">
+        <i data-lucide="sparkles" class="w-4 h-4 text-pt-blue"></i>
+        <span>Portal de Gestión Ambiental y Residuos</span>
+      </div>
+      <p class="text-pt-muted text-xs sm:text-sm font-medium">
+        Selecciona una herramienta para comenzar el procesamiento de datos.
+      </p>
+    </div>
+
+    <!-- GRID DE OPCIONES PRINCIPALES (3 TARJETAS) -->
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+      
+      <!-- TARJETA 01: REPORTES (CONCENTRADO EXCEL) - DESPLIEGA MODAL -->
+      <article onclick="abrirModalOperacion()" class="group cursor-pointer bg-pt-surface border border-slate-200 hover:border-pt-blue/50 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-pt-blue/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pt-blue to-pt-green"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-pt-blueLight flex items-center justify-center text-pt-blue group-hover:scale-105 group-hover:bg-pt-blue group-hover:text-white transition-all duration-300">
+              <i data-lucide="file-spreadsheet" class="w-7 h-7 stroke-[1.8]"></i>
+            </div>
+            <span class="text-xs font-extrabold tracking-wider text-slate-300 group-hover:text-pt-blue transition-colors">
+              01
+            </span>
+          </div>
+          
+          <span class="text-[11px] font-bold tracking-wider uppercase text-pt-blue mb-2 block">
+            REPORTES
+          </span>
+          <h2 class="text-xl font-bold text-pt-dark mb-3 group-hover:text-pt-blue transition-colors">
+            Crear concentrado Excel
+          </h2>
+          <p class="text-pt-muted text-sm leading-relaxed mb-6">
+            Selecciona Entradas o Salidas para comenzar.
+          </p>
+        </div>
+
+        <div class="flex items-center text-pt-dark font-semibold text-sm group-hover:text-pt-blue transition-colors pt-4 border-t border-slate-100">
+          <span>Crear reporte</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1.5 text-pt-blue"></i>
+        </div>
+      </article>
+
+      <!-- TARJETA 02: ANÁLISIS (DASHBOARD) -->
+      <article onclick="abrirVistaDashboard()" class="group cursor-pointer bg-pt-surface border border-slate-200 hover:border-pt-green/50 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-pt-green/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pt-green to-pt-blue"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-pt-greenLight flex items-center justify-center text-pt-green group-hover:scale-105 group-hover:bg-pt-green group-hover:text-white transition-all duration-300">
+              <i data-lucide="trending-up" class="w-7 h-7 stroke-[1.8]"></i>
+            </div>
+            <span class="text-xs font-extrabold tracking-wider text-slate-300 group-hover:text-pt-green transition-colors">
+              02
+            </span>
+          </div>
+
+          <span class="text-[11px] font-bold tracking-wider uppercase text-pt-green mb-2 block">
+            ANÁLISIS & KPIS
+          </span>
+          <h2 class="text-xl font-bold text-pt-dark mb-3 group-hover:text-pt-green transition-colors">
+            Métricas y dashboard
+          </h2>
+          <p class="text-pt-muted text-sm leading-relaxed mb-6">
+            Indicadores clave de volumen y distribución.
+          </p>
+        </div>
+
+        <div class="flex items-center text-pt-dark font-semibold text-sm group-hover:text-pt-green transition-colors pt-4 border-t border-slate-100">
+          <span>Ver métricas</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1.5 text-pt-green"></i>
+        </div>
+      </article>
+
+      <!-- TARJETA 03: TRAZABILIDAD (HISTÓRICO) -->
+      <article onclick="abrirVistaHistorico()" class="group cursor-pointer bg-pt-surface border border-slate-200 hover:border-pt-blue/50 rounded-3xl p-8 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1.5 hover:shadow-xl hover:shadow-pt-blue/10 relative overflow-hidden">
+        <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-pt-blue to-pt-muted"></div>
+
+        <div>
+          <div class="flex items-center justify-between mb-8">
+            <div class="w-14 h-14 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700 group-hover:scale-105 group-hover:bg-slate-800 group-hover:text-white transition-all duration-300">
+              <i data-lucide="history" class="w-7 h-7 stroke-[1.8]"></i>
+            </div>
+            <span class="text-xs font-extrabold tracking-wider text-slate-300 group-hover:text-slate-800 transition-colors">
+              03
+            </span>
+          </div>
+
+          <span class="text-[11px] font-bold tracking-wider uppercase text-slate-500 mb-2 block">
+            TRAZABILIDAD & AUDITORÍA
+          </span>
+          <h2 class="text-xl font-bold text-pt-dark mb-3 group-hover:text-slate-800 transition-colors">
+            Datos históricos
+          </h2>
+          <p class="text-pt-muted text-sm leading-relaxed mb-6">
+            Consulta de registros y movimientos anteriores.
+          </p>
+        </div>
+
+        <div class="flex items-center text-pt-dark font-semibold text-sm group-hover:text-slate-800 transition-colors pt-4 border-t border-slate-100">
+          <span>Consultar datos</span>
+          <i data-lucide="arrow-right" class="w-4 h-4 ml-2 transition-transform group-hover:translate-x-1.5 text-slate-800"></i>
+        </div>
+      </article>
+
+    </section>
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- VISTA 02: CARGAR Y HOMOLOGAR EXCELS (SPA DINÁMICA) -->
+  <!-- ======================================================== -->
+  <main id="view-homologacion" class="hidden w-full max-w-6xl mx-auto bg-white/95 border border-slate-200/80 rounded-[2.5rem] p-6 sm:p-10 md:p-12 shadow-xl shadow-slate-200/50 backdrop-blur-md transition-all duration-300">
+    
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN Y TÍTULO -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-100">
+      <div class="flex items-center gap-4">
+        <button 
+          onclick="volverAlHub()" 
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-pt-dark font-bold text-xs uppercase tracking-wider transition-all duration-200 hover:-translate-x-0.5 active:scale-95"
+          title="Regresar al menú principal"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4 text-pt-blue"></i>
+          <span>Volver al inicio</span>
+        </button>
+        
+        <div>
+          <div class="flex items-center gap-2">
+            <span id="badge-tipo-operacion" class="px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-pt-blueLight text-pt-blue">
+              ENTRADAS
+            </span>
+            <span class="text-xs text-pt-muted font-medium">Homologación Oficial Plastic Trade</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-pt-dark mt-1">
+            Cargar y Homologar Excels
+          </h1>
+        </div>
+      </div>
+
+      <!-- Acción Rápida: Cargar archivos de prueba si existen en el sistema -->
+      <div class="flex items-center gap-2">
+        <button 
+          type="button"
+          onclick="usarArchivosPrueba()" 
+          class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border border-pt-green/40 bg-pt-greenLight/60 hover:bg-pt-greenLight text-pt-greenHover font-bold text-xs transition-colors shadow-sm"
+          title="Carga directa de archivos de prueba del sistema para pruebas rápidas"
+        >
+          <i data-lucide="folder-cog" class="w-4 h-4 text-pt-green"></i>
+          <span>Usar Excels de Prueba</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENEDOR DE TARJETAS DE CARGA DE ARCHIVOS -->
+    <div class="mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+        <div>
+          <h2 class="text-base font-bold text-pt-dark flex items-center gap-2">
+            <i data-lucide="upload-cloud" class="w-5 h-5 text-pt-blue"></i>
+            <span>Archivos Fuente Requeridos (Soporta múltiples archivos por fuente)</span>
+          </h2>
+          <p id="subtitulo-cajas" class="text-xs text-pt-muted mt-0.5">
+            Arrastra o selecciona uno o más archivos Excel para cada origen operativo.
+          </p>
+        </div>
+        <span id="contador-archivos" class="text-xs font-semibold px-3 py-1 rounded-full bg-slate-100 text-slate-600 self-start sm:self-auto">
+          0 archivos seleccionados
+        </span>
+      </div>
+
+      <!-- GRID DE CAJAS ADAPTABLE SEGÚN ENTRADAS O SALIDAS -->
+      <div id="grid-cajas-archivos" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        
+        <!-- CAJA 1: ALMACÉN (MULTIPLE) -->
+        <div 
+          id="box-almacen" 
+          class="bg-pt-surface border-2 border-dashed border-slate-200 hover:border-pt-blue/60 rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 relative group"
+          ondragover="dragOverBox(event, 'almacen')"
+          ondragleave="dragLeaveBox(event, 'almacen')"
+          ondrop="dropBox(event, 'almacen')"
+        >
+          <input type="file" id="input-almacen" accept=".xlsx,.xls" multiple class="hidden" onchange="archivosSeleccionados('almacen', this)" />
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center font-bold text-xs">
+                01
+              </span>
+              <span id="tag-almacen" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                0 archivos
+              </span>
+            </div>
+            <h3 class="font-bold text-sm text-pt-dark mb-1">1. Almacén</h3>
+            <p id="desc-almacen" class="text-[11px] text-pt-muted leading-snug mb-3">
+              Hoja: <span class="font-semibold text-pt-dark">ENTRADAS MP</span> (Fecha B, Proveedor F, Material K, Pz M, Kg O).
+            </p>
+
+            <!-- Lista de archivos seleccionados (chips dinámicos) -->
+            <div id="filelist-almacen" class="max-h-24 overflow-y-auto space-y-1.5 mb-2">
+              <span class="text-xs text-slate-400 italic block">Sin archivos adjuntos</span>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Excel (.xlsx, .xls)</span>
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button"
+                onclick="document.getElementById('input-almacen').click()" 
+                class="px-2.5 py-1.5 rounded-lg bg-pt-blueLight hover:bg-pt-blue hover:text-white text-pt-blue text-xs font-bold transition-colors"
+                title="Seleccionar archivos"
+              >
+                + Añadir
+              </button>
+              <button 
+                type="button" 
+                id="btn-clear-almacen"
+                onclick="limpiarFuente('almacen')" 
+                class="hidden p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors"
+                title="Quitar todos los archivos de Almacén"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAJA 2: FACTURACIÓN (MULTIPLE) -->
+        <div 
+          id="box-facturacion" 
+          class="bg-pt-surface border-2 border-dashed border-slate-200 hover:border-pt-blue/60 rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 relative group"
+          ondragover="dragOverBox(event, 'facturacion')"
+          ondragleave="dragLeaveBox(event, 'facturacion')"
+          ondrop="dropBox(event, 'facturacion')"
+        >
+          <input type="file" id="input-facturacion" accept=".xlsx,.xls" multiple class="hidden" onchange="archivosSeleccionados('facturacion', this)" />
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center font-bold text-xs">
+                02
+              </span>
+              <span id="tag-facturacion" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                0 archivos
+              </span>
+            </div>
+            <h3 class="font-bold text-sm text-pt-dark mb-1">2. Facturación</h3>
+            <p id="desc-facturacion" class="text-[11px] text-pt-muted leading-snug mb-3">
+              Hoja: <span class="font-semibold text-pt-dark">PROGRAMA_ENTREGAS</span> (Fila 10+, Status 'Entregado', Fecha E, Cliente G, Espec L, Pz O).
+            </p>
+
+            <div id="filelist-facturacion" class="max-h-24 overflow-y-auto space-y-1.5 mb-2">
+              <span class="text-xs text-slate-400 italic block">Sin archivos adjuntos</span>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Excel (.xlsx, .xls)</span>
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button"
+                onclick="document.getElementById('input-facturacion').click()" 
+                class="px-2.5 py-1.5 rounded-lg bg-pt-blueLight hover:bg-pt-blue hover:text-white text-pt-blue text-xs font-bold transition-colors"
+              >
+                + Añadir
+              </button>
+              <button 
+                type="button" 
+                id="btn-clear-facturacion"
+                onclick="limpiarFuente('facturacion')" 
+                class="hidden p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors"
+                title="Quitar todos los archivos de Facturación"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAJA 3: SOSTENIBILIDAD (MULTIPLE) -->
+        <div 
+          id="box-sostenibilidad" 
+          class="bg-pt-surface border-2 border-dashed border-slate-200 hover:border-pt-blue/60 rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 relative group"
+          ondragover="dragOverBox(event, 'sostenibilidad')"
+          ondragleave="dragLeaveBox(event, 'sostenibilidad')"
+          ondrop="dropBox(event, 'sostenibilidad')"
+        >
+          <input type="file" id="input-sostenibilidad" accept=".xlsx,.xls" multiple class="hidden" onchange="archivosSeleccionados('sostenibilidad', this)" />
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center font-bold text-xs">
+                03
+              </span>
+              <span id="tag-sostenibilidad" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                0 archivos
+              </span>
+            </div>
+            <h3 class="font-bold text-sm text-pt-dark mb-1">3. Sostenibilidad</h3>
+            <p class="text-[11px] text-pt-muted leading-snug mb-3">
+              Hoja interna: <span class="font-semibold text-pt-dark">PERNOD</span> (Sitio fijo Pernod Ricard, Conos C, Playo D).
+            </p>
+
+            <div id="filelist-sostenibilidad" class="max-h-24 overflow-y-auto space-y-1.5 mb-2">
+              <span class="text-xs text-slate-400 italic block">Sin archivos adjuntos</span>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Excel (.xlsx, .xls)</span>
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button"
+                onclick="document.getElementById('input-sostenibilidad').click()" 
+                class="px-2.5 py-1.5 rounded-lg bg-pt-blueLight hover:bg-pt-blue hover:text-white text-pt-blue text-xs font-bold transition-colors"
+              >
+                + Añadir
+              </button>
+              <button 
+                type="button" 
+                id="btn-clear-sostenibilidad"
+                onclick="limpiarFuente('sostenibilidad')" 
+                class="hidden p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors"
+                title="Quitar todos los archivos de Sostenibilidad"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- CAJA 4: UZIEL (MULTIPLE) -->
+        <div 
+          id="box-uziel" 
+          class="bg-pt-surface border-2 border-dashed border-slate-200 hover:border-pt-blue/60 rounded-2xl p-4 flex flex-col justify-between transition-all duration-200 relative group"
+          ondragover="dragOverBox(event, 'uziel')"
+          ondragleave="dragLeaveBox(event, 'uziel')"
+          ondrop="dropBox(event, 'uziel')"
+        >
+          <input type="file" id="input-uziel" accept=".xlsx,.xls" multiple class="hidden" onchange="archivosSeleccionados('uziel', this)" />
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <span class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center font-bold text-xs">
+                04
+              </span>
+              <span id="tag-uziel" class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500">
+                0 archivos
+              </span>
+            </div>
+            <h3 class="font-bold text-sm text-pt-dark mb-1">4. Uziel</h3>
+            <p class="text-[11px] text-pt-muted leading-snug mb-3">
+              Hoja: <span class="font-semibold text-pt-dark">Entradas y Salidas</span> (Filtro 'Entrada', Fecha C, Sitio G, Material E).
+            </p>
+
+            <div id="filelist-uziel" class="max-h-24 overflow-y-auto space-y-1.5 mb-2">
+              <span class="text-xs text-slate-400 italic block">Sin archivos adjuntos</span>
+            </div>
+          </div>
+
+          <div class="mt-2 pt-3 border-t border-slate-100 flex items-center justify-between">
+            <span class="text-[10px] text-slate-400">Excel (.xlsx, .xls)</span>
+            <div class="flex items-center gap-1.5">
+              <button 
+                type="button"
+                onclick="document.getElementById('input-uziel').click()" 
+                class="px-2.5 py-1.5 rounded-lg bg-pt-blueLight hover:bg-pt-blue hover:text-white text-pt-blue text-xs font-bold transition-colors"
+              >
+                + Añadir
+              </button>
+              <button 
+                type="button" 
+                id="btn-clear-uziel"
+                onclick="limpiarFuente('uziel')" 
+                class="hidden p-1.5 rounded-lg text-rose-500 hover:bg-rose-50 transition-colors"
+                title="Quitar todos los archivos de Uziel"
+              >
+                <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BOTÓN PRINCIPAL DE PROCESAMIENTO -->
+      <div class="mt-6 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-slate-50/70 border border-slate-200/60 rounded-2xl">
+        <div class="text-xs text-pt-muted flex items-center gap-2">
+          <i data-lucide="shield-check" class="w-4 h-4 text-pt-green"></i>
+          <span>Validación estricta: Exclusión automática de REGEN y maderas/tarimas, 4 categorías oficiales y SHA-256.</span>
+        </div>
+
+        <button 
+          id="btn-procesar"
+          onclick="enviarAProcesar()"
+          class="w-full sm:w-auto inline-flex items-center justify-center gap-2.5 px-7 py-3 rounded-2xl bg-gradient-to-r from-pt-blue to-pt-blueHover text-white font-extrabold text-sm shadow-md shadow-pt-blue/20 hover:shadow-lg hover:shadow-pt-blue/30 transition-all duration-200 hover:-translate-y-0.5 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          <i data-lucide="play" class="w-4 h-4 fill-current"></i>
+          <span>Procesar y Homologar Lote</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- NOTIFICACIONES Y MENSAJES DE ESTADO -->
+    <div id="status-container" class="hidden mb-6">
+      <div id="status-box" class="p-4 rounded-2xl flex items-center gap-3 text-sm">
+        <i id="status-icon" data-lucide="info" class="w-5 h-5 flex-shrink-0"></i>
+        <div id="status-text" class="font-medium flex-1"></div>
+      </div>
+    </div>
+
+    <!-- TARJETAS DE KPIS Y RESUMEN DE PROCESAMIENTO -->
+    <div id="kpi-container" class="hidden mb-8">
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-4">
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-pt-muted block mb-1">Registros Validados</span>
+          <span id="kpi-total-filas" class="text-2xl sm:text-3xl font-extrabold text-pt-dark">0</span>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-pt-muted block mb-1">Total Kilogramos (Kg)</span>
+          <span id="kpi-total-kg" class="text-2xl sm:text-3xl font-extrabold text-pt-blue">0.00</span>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-pt-muted block mb-1">Total Piezas (Pz)</span>
+          <span id="kpi-total-pz" class="text-2xl sm:text-3xl font-extrabold text-pt-green">0</span>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+          <span class="text-[11px] font-bold uppercase tracking-wider text-pt-muted block mb-1">Total Tarimas</span>
+          <span id="kpi-total-tarimas" class="text-2xl sm:text-3xl font-extrabold text-amber-600">0</span>
+        </div>
+      </div>
+
+      <!-- DESGLOSE POR LAS 6 CATEGORÍAS INDEPENDIENTES -->
+      <div class="bg-slate-50/80 border border-slate-200/80 rounded-2xl p-4">
+        <span class="text-xs font-bold text-pt-dark block mb-2">Desglose por Categoría Oficial (6 Categorías Independientes):</span>
+        <div id="pills-categorias" class="flex flex-wrap gap-2 text-xs">
+          <!-- Píldoras dinámicas generadas en JS -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN DE VISTA PREVIA CONSOLIDADA (TABLA DE 6 COLUMNAS) -->
+    <section id="section-tabla-previa" class="hidden">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-lg font-extrabold text-pt-dark flex items-center gap-2">
+            <i data-lucide="table" class="w-5 h-5 text-pt-green"></i>
+            <span id="titulo-tabla-previa">Vista Previa Consolidada</span>
+          </h2>
+          <span id="info-mostrando-filas" class="text-xs text-pt-muted">Mostrando 0 registros</span>
+        </div>
+
+        <!-- BUSCADOR Y BOTONES DE DESCARGA -->
+        <div class="flex flex-wrap items-center gap-2">
+          <!-- Buscador en tiempo real -->
+          <div class="relative">
+            <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input 
+              type="text" 
+              id="filtro-tabla" 
+              placeholder="Buscar sitio, fecha, residuo..." 
+              oninput="filtrarTabla()"
+              class="pl-9 pr-3 py-1.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue w-48 sm:w-60 shadow-sm"
+            />
+          </div>
+
+          <!-- Botón de Descarga Excel (.xlsx) -->
+          <button 
+            type="button"
+            onclick="descargarExcelConsolidado()" 
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-pt-green text-white font-bold text-xs hover:bg-pt-greenHover transition-all shadow-sm active:scale-95"
+            title="Descargar archivo Excel oficial con formato de celdas"
+          >
+            <i data-lucide="file-down" class="w-3.5 h-3.5"></i>
+            <span>Descargar Excel (.xlsx)</span>
+          </button>
+
+          <!-- Botón de Descarga CSV -->
+          <button 
+            type="button"
+            onclick="descargarCSVConsolidado()" 
+            class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl border border-slate-200 bg-white text-pt-dark font-semibold text-xs hover:bg-slate-50 transition-all shadow-sm"
+            title="Descargar formato CSV para compatibilidad"
+          >
+            <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+            <span>CSV</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- TABLA DE DATOS CON ENCABEZADOS OFICIALES -->
+      <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm max-h-[500px]">
+        <table class="w-full text-left text-xs border-collapse">
+          <thead id="thead-registros" class="bg-slate-100/90 text-pt-dark sticky top-0 z-10 shadow-sm">
+            <tr class="divide-x divide-slate-200 font-bold border-b border-slate-200 uppercase text-[11px] tracking-wider">
+              <th class="px-3.5 py-3 text-center w-28">Fecha</th>
+              <th class="px-4 py-3">Sitio</th>
+              <th class="px-4 py-3">Tipo de Residuo</th>
+              <th class="px-3.5 py-3 text-right w-28">Kg</th>
+              <th class="px-3.5 py-3 text-right w-24">Pz</th>
+              <th class="px-3.5 py-3 text-right w-24">Tarimas</th>
+            </tr>
+          </thead>
+          <tbody id="tbody-registros" class="divide-y divide-slate-100 text-slate-700">
+            <!-- Filas dinámicas generadas en JS -->
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- VISTA 02: MÉTRICAS Y DASHBOARD (MÓDULO 02) -->
+  <!-- ======================================================== -->
+  <main id="view-dashboard" class="hidden w-full max-w-6xl mx-auto bg-white/95 border border-slate-200/80 rounded-[2.5rem] p-6 sm:p-10 md:p-12 shadow-xl shadow-slate-200/50 backdrop-blur-md transition-all duration-300">
+    
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN Y TÍTULO -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-100">
+      <div class="flex items-center gap-4">
+        <button 
+          onclick="volverAlHub()" 
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-pt-dark font-bold text-xs uppercase tracking-wider transition-all duration-200 hover:-translate-x-0.5 active:scale-95"
+          title="Regresar al menú principal"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4 text-pt-blue"></i>
+          <span>Volver al inicio</span>
+        </button>
+        
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-pt-greenLight text-pt-greenHover">
+              MÓDULO 02 • ANÁLISIS & KPIS AMBIENTALES
+            </span>
+            <span class="text-xs text-pt-muted font-medium">Plastic Trade Analytics</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-pt-dark mt-1">
+            Métricas y Dashboard de Sustentabilidad
+          </h1>
+        </div>
+      </div>
+
+      <!-- BOTÓN DE RECARGA / ACCIONES -->
+      <div class="flex items-center gap-2">
+        <!-- BOTÓN MODO PRESENTACIÓN AISLADA -->
+        <button 
+          type="button"
+          onclick="abrirModalPresentacion()" 
+          id="btn-iniciar-presentacion"
+          class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/70 hover:bg-amber-100 text-amber-900 font-bold text-xs transition-all shadow-2xs group cursor-pointer"
+          title="Cargar archivo Excel para proyección temporal sin tocar Supabase"
+        >
+          <i data-lucide="presentation" class="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform"></i>
+          <span>📽️ Iniciar Modo Presentación Aislada</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="cargarMetricasDashboard()" 
+          class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs transition-colors shadow-sm"
+          title="Recargar datos del dashboard"
+        >
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-pt-blue" id="icon-recargar-dash"></i>
+          <span>Actualizar Métricas</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BANNER DE ESTADO ACTIVO DEL MODO PRESENTACIÓN -->
+    <div id="banner-modo-presentacion" class="hidden mb-6 p-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-emerald-700 text-white shadow-lg shadow-emerald-700/20 border border-emerald-400 flex flex-col sm:flex-row sm:items-center justify-between gap-4 animate-in fade-in duration-300">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-white/20 backdrop-blur-xs flex items-center justify-center shrink-0 border border-white/30 shadow-inner">
+          <i data-lucide="shield-check" class="w-5 h-5 text-white"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-black tracking-wider uppercase px-2.5 py-0.5 rounded-full bg-white text-emerald-800 shadow-2xs">
+              🟢 MODO PRESENTACIÓN AISLADA ACTIVO (Datos temporales en memoria)
+            </span>
+          </div>
+          <p class="text-xs text-emerald-50 mt-1">
+            Proyectando métricas desde: <strong id="lbl-nombre-archivo-presentacion" class="text-white underline">archivo.xlsx</strong>. 
+            <span class="opacity-90">Los gráficos, KPIs y el Asistente IA operan exclusivamente con estos datos sin alterar Supabase.</span>
+          </p>
+        </div>
+      </div>
+      <button 
+        type="button" 
+        onclick="salirModoPresentacion()" 
+        class="inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white font-extrabold text-xs shadow-md transition-all cursor-pointer shrink-0"
+        title="Salir del modo aislado y restaurar los datos de Supabase"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+        <span>❌ Salir de Presentación</span>
+      </button>
+    </div>
+
+    <!-- BARRA DE FILTROS GLOBALES REACTIVOS -->
+    <div class="bg-pt-surface border border-slate-200/90 rounded-2xl p-5 mb-8 shadow-sm">
+      <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200/50">
+        <span class="text-xs font-bold uppercase tracking-wider text-pt-dark flex items-center gap-1.5">
+          <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-pt-blue"></i>
+          Filtros de Análisis Ambiental
+        </span>
+        <button 
+          type="button"
+          onclick="restablecerFiltrosDashboard()" 
+          class="text-xs text-pt-muted hover:text-rose-600 font-semibold transition-colors flex items-center gap-1"
+        >
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+          <span>Restablecer Filtros</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <!-- 1. Filtro Cliente / Sitio -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Cliente / Sitio</label>
+          <select 
+            id="dash-filtro-sitio" 
+            onchange="cargarMetricasDashboard()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium"
+          >
+            <option value="Todos">Todos los Sitios</option>
+          </select>
+        </div>
+
+        <!-- 2. Filtro Fecha Desde (Ocultable en Modo Presentación / Monositio) -->
+        <div id="contenedor-filtro-desde">
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Fecha Desde</label>
+          <input 
+            type="date" 
+            id="dash-filtro-desde" 
+            onchange="cargarMetricasDashboard()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm"
+          />
+        </div>
+
+        <!-- 3. Filtro Fecha Hasta (Ocultable en Modo Presentación / Monositio) -->
+        <div id="contenedor-filtro-hasta">
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Fecha Hasta</label>
+          <input 
+            type="date" 
+            id="dash-filtro-hasta" 
+            onchange="cargarMetricasDashboard()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm"
+          />
+        </div>
+
+        <!-- Selector Alternativo de Mes para Modo Presentación y Reportes Monositio -->
+        <div id="filtro-contenedor-mes" class="filter-group sm:col-span-2 lg:col-span-2" style="display: none;">
+          <label for="filtro-mes" class="text-xs font-semibold text-slate-500 uppercase tracking-wider block mb-1">Periodo (Mes)</label>
+          <select id="filtro-mes" onchange="cargarMetricasDashboard()" class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium">
+            <option value="TODOS" selected>Todos los Meses (Año Completo)</option>
+            <option value="Ene">Enero</option>
+            <option value="Feb">Febrero</option>
+            <option value="Mar">Marzo</option>
+            <option value="Abr">Abril</option>
+            <option value="May">Mayo</option>
+            <option value="Jun">Junio</option>
+            <option value="Jul">Julio</option>
+            <option value="Ago">Agosto</option>
+            <option value="Sep">Septiembre</option>
+            <option value="Oct">Octubre</option>
+            <option value="Nov">Noviembre</option>
+            <option value="Dic">Diciembre</option>
+          </select>
+        </div>
+
+        <!-- 4. Filtro de Flujo (Operación) -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Flujo Operativo</label>
+          <select 
+            id="dash-filtro-operacion" 
+            onchange="cargarMetricasDashboard()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium"
+          >
+            <option value="ENTRADAS" selected>ENTRADAS (Por defecto)</option>
+            <option value="SALIDAS">SALIDAS</option>
+            <option value="Ambas">Ambas Operaciones</option>
+          </select>
+        </div>
+
+        <!-- 5. Filtro por Residuo -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Filtrar por Residuo</label>
+          <select 
+            id="dash-filtro-residuo" 
+            onchange="cargarMetricasDashboard()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium"
+          >
+            <option value="Todos" selected>Todos los Residuos</option>
+            <option value="Playo">Playo</option>
+            <option value="Cartón">Cartón</option>
+            <option value="Cono">Cono</option>
+            <option value="Tarima / Madera">Tarima / Madera</option>
+            <option value="Chatarra">Chatarra</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 01: LOS 5 INDICADORES ECOLÓGICOS (FORMULACIÓN EXACTA) -->
+    <!-- ======================================================== -->
+    <div class="mb-8">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-extrabold uppercase tracking-wider text-slate-600 flex items-center gap-2">
+          <i data-lucide="leaf" class="w-4 h-4 text-pt-green"></i>
+          <span>Impacto Ambiental Evitado (5 Indicadores Clave)</span>
+        </h2>
+        <span class="text-xs text-pt-muted font-medium">Factores Oficiales de Sustentabilidad</span>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        
+        <!-- KPI 1: tCO2e Sin emitir -->
+        <div class="bg-gradient-to-br from-white to-sky-50/40 border border-sky-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all relative">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-pt-blue">1. Huella Carbono</span>
+            <div class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center">
+              <i data-lucide="cloud-off" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1.5 mb-1">
+            <span id="kpi-tco2e" class="text-xl sm:text-2xl font-extrabold text-pt-dark truncate max-w-full block" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="0.00">0.00</span>
+            <span class="text-xs font-bold text-pt-blue">tCO2e</span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-600">tCO2e Sin emitir</p>
+        </div>
+
+        <!-- KPI 2: Árboles sin talar -->
+        <div class="bg-gradient-to-br from-white to-emerald-50/40 border border-emerald-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-pt-greenHover">2. Bosques</span>
+            <div class="w-8 h-8 rounded-xl bg-pt-greenLight text-pt-green flex items-center justify-center">
+              <i data-lucide="trees" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1.5 mb-1">
+            <span id="kpi-arboles" class="text-xl sm:text-2xl font-extrabold text-pt-dark truncate max-w-full block" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="0.00">0.00</span>
+            <span class="text-xs font-bold text-pt-greenHover">árboles</span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-600">Árboles sin talar</p>
+        </div>
+
+        <!-- KPI 3: Energía no consumida -->
+        <div class="bg-gradient-to-br from-white to-amber-50/40 border border-amber-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-amber-700">3. Energía</span>
+            <div class="w-8 h-8 rounded-xl bg-amber-100/80 text-amber-600 flex items-center justify-center">
+              <i data-lucide="zap" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1.5 mb-1">
+            <span id="kpi-energia" class="text-xl sm:text-2xl font-extrabold text-pt-dark truncate max-w-full block" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="0.00">0.00</span>
+            <span class="text-xs font-bold text-amber-700">kW/hr</span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-600">Energía no consumida</p>
+        </div>
+
+        <!-- KPI 4: L de agua no consumida -->
+        <div class="bg-gradient-to-br from-white to-cyan-50/40 border border-cyan-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-cyan-700">4. Recurso Hídrico</span>
+            <div class="w-8 h-8 rounded-xl bg-cyan-100/80 text-cyan-600 flex items-center justify-center">
+              <i data-lucide="droplets" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1.5 mb-1">
+            <span id="kpi-agua" class="text-xl sm:text-2xl font-extrabold text-pt-dark truncate max-w-full block" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="0.00">0.00</span>
+            <span class="text-xs font-bold text-cyan-700">Litros</span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-600">Agua no consumida</p>
+        </div>
+
+        <!-- KPI 5: Combustible fósil no consumido -->
+        <div class="bg-gradient-to-br from-white to-purple-50/40 border border-purple-100 rounded-2xl p-4 shadow-sm hover:shadow-md transition-all">
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-[11px] font-extrabold uppercase tracking-wider text-purple-700">5. Fósiles</span>
+            <div class="w-8 h-8 rounded-xl bg-purple-100/80 text-purple-600 flex items-center justify-center">
+              <i data-lucide="fuel" class="w-4 h-4"></i>
+            </div>
+          </div>
+          <div class="flex items-baseline gap-1.5 mb-1">
+            <span id="kpi-combustible" class="text-xl sm:text-2xl font-extrabold text-pt-dark truncate max-w-full block" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;" title="0.00">0.00</span>
+            <span class="text-xs font-bold text-purple-700">Litros</span>
+          </div>
+          <p class="text-[11px] font-semibold text-slate-600">Combustible no consumido</p>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- RESUMEN COMPACTO DE MATERIALES VALORIZADOS -->
+    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-4 mb-8 flex flex-wrap items-center justify-between gap-3 text-xs">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-pt-green"></span>
+        <span class="font-bold text-pt-dark">Volumen Total Filtrado:</span>
+        <span id="dash-total-kg" class="font-extrabold text-pt-blue text-sm">0.00 Kg</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-3">
+        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-medium text-slate-700">
+          Playo: <strong id="dash-kg-playo" class="text-pt-blue">0.00</strong> Kg
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-medium text-slate-700">
+          Cono: <strong id="dash-kg-cono" class="text-pt-green">0.00</strong> Kg
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-medium text-slate-700">
+          Cartón: <strong id="dash-kg-carton" class="text-amber-600">0.00</strong> Kg
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-medium text-slate-700">
+          Chatarra: <strong id="dash-kg-chatarra" class="text-slate-600">0.00</strong> Kg
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-amber-50 border border-amber-200 text-amber-800 font-bold">
+          Tarimas: <span id="dash-total-tarimas">0.00 Kg</span>
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-white border border-slate-200 font-medium text-slate-700">
+          Piezas: <span id="dash-total-pz">0</span>
+        </span>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 02: RANKINGS TOP 3 GENERADORES (MÁS Y MENOS) -->
+    <!-- ======================================================== -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      
+      <!-- TOP 3 SITIOS QUE MÁS GENERAN RESIDUOS -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-pt-blueLight text-pt-blue flex items-center justify-center">
+              <i data-lucide="trending-up" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 id="title-ranking-top-mas" class="font-extrabold text-sm text-pt-dark">Top 3 Sitios de Mayor Generación</h3>
+              <p id="sub-ranking-top-mas" class="text-[11px] text-pt-muted">Clientes con mayor volumen recuperado (Kg)</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-pt-blueLight text-pt-blue">Mayor Volumen</span>
+        </div>
+        <div id="ranking-top-mas" class="space-y-3">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
+      <!-- TOP 3 SITIOS QUE MENOS GENERAN RESIDUOS -->
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 shadow-sm">
+        <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-xl bg-pt-greenLight text-pt-green flex items-center justify-center">
+              <i data-lucide="trending-down" class="w-4 h-4"></i>
+            </div>
+            <div>
+              <h3 id="title-ranking-top-menos" class="font-extrabold text-sm text-pt-dark">Top 3 Sitios de Menor Generación</h3>
+              <p id="sub-ranking-top-menos" class="text-[11px] text-pt-muted">Clientes con menor concentración de residuos</p>
+            </div>
+          </div>
+          <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-pt-greenLight text-pt-greenHover">Menor Volumen</span>
+        </div>
+        <div id="ranking-top-menos" class="space-y-3">
+          <!-- Generado dinámicamente -->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 03: GRÁFICOS DE BARRAS COMPARATIVOS (3 WIDGETS) -->
+    <!-- ======================================================== -->
+    <div class="mb-8">
+      <h2 class="text-sm font-extrabold uppercase tracking-wider text-slate-600 mb-4 flex items-center gap-2">
+        <i data-lucide="bar-chart-2" class="w-4 h-4 text-pt-blue"></i>
+        <span>Comparativas de Impacto Ecológico</span>
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        <!-- Gráfico A: tCO2e vs Árboles -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h4 class="font-bold text-xs text-pt-dark">tCO2e Sin emitir vs Árboles sin talar</h4>
+            <p class="text-[10px] text-pt-muted">Equivalencias de reducción directa</p>
+          </div>
+          <div class="relative h-56 w-full">
+            <canvas id="chart-co2-arboles"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico B: Energía (kW/hr) vs Agua (L) -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h4 class="font-bold text-xs text-pt-dark">Energía no consumida vs Agua protegida</h4>
+            <p class="text-[10px] text-pt-muted">kW/hr y Litros no consumidos</p>
+          </div>
+          <div class="relative h-56 w-full">
+            <canvas id="chart-energia-agua"></canvas>
+          </div>
+        </div>
+
+        <!-- Gráfico C: Combustible fósil no consumido -->
+        <div class="bg-white border border-slate-200 rounded-3xl p-5 shadow-sm flex flex-col justify-between">
+          <div class="mb-3">
+            <h4 class="font-bold text-xs text-pt-dark">Combustible Fósil Ahorrado</h4>
+            <p class="text-[10px] text-pt-muted">Litros equivalentes por reciclaje de cono</p>
+          </div>
+          <div class="relative h-56 w-full">
+            <canvas id="chart-combustible"></canvas>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- SECCIÓN 04: DONA DE PLAYO & TENDENCIA TEMPORAL CON PROYECCIÓN -->
+    <!-- ======================================================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Gráfico de Dona: Distribución de Playo por Cliente (5 cols) -->
+      <div class="lg:col-span-5 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <h3 id="title-playo-distribucion" class="font-extrabold text-sm text-pt-dark flex items-center gap-1.5">
+              <i data-lucide="pie-chart" class="w-4 h-4 text-pt-blue"></i>
+              <span>Producción de tCO₂e Evitado por Mes</span>
+            </h3>
+            <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-slate-100 text-slate-600">Dona</span>
+          </div>
+          <p id="sub-playo-distribucion" class="text-[11px] text-pt-muted mb-4">Distribución porcentual y toneladas de CO₂e evitadas por periodo mensual.</p>
+        </div>
+        <div class="relative h-64 w-full flex items-center justify-center">
+          <canvas id="chart-playo-distribucion"></canvas>
+        </div>
+      </div>
+
+      <!-- Gráfico Superior Derecho: Comportamiento Mensual y Mitigación de CO₂: Playo (7 cols) -->
+      <div class="lg:col-span-7 card p-5 bg-white rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between">
+        <div class="flex justify-between items-center mb-3">
+          <div>
+            <h3 class="text-sm font-bold text-slate-800">Comportamiento Mensual y Mitigación de CO₂: Playo</h3>
+            <p class="text-xs text-slate-500">Relación cronológica entre volumen (Kg) y CO₂e evitado con línea de tendencia</p>
+          </div>
+          <div class="flex gap-1.5">
+            <span class="badge bg-sky-50 text-sky-600 font-medium text-xs px-2 py-0.5 rounded">Kg (Izq.)</span>
+            <span class="badge bg-emerald-50 text-emerald-600 font-medium text-xs px-2 py-0.5 rounded">tCO₂e (Der.)</span>
+          </div>
+        </div>
+        <div style="position: relative; height: 280px; width: 100%;">
+          <canvas id="chartPlayoMensual"></canvas>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 04.B GRÁFICO COMBINADO UNIFICADO: CARTÓN (ANCHO COMPLETO) -->
+    <!-- ======================================================== -->
+    <div id="contenedor-grafica-carton" class="card p-5 bg-white rounded-xl shadow-sm border border-slate-100 mt-6">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-2 mb-4">
+        <div>
+          <h3 id="titulo-grafica-carton" class="text-base font-bold text-slate-800">
+            Comportamiento Mensual y Mitigación de CO₂: Cartón
+          </h3>
+          <p class="text-xs text-slate-500">
+            Relación cronológica entre volumen recuperado (Kg) y huella de carbono evitada (tCO₂e) con línea de tendencia
+          </p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="badge bg-sky-50 text-sky-600 font-medium text-xs px-2.5 py-1 rounded">Kg (Eje Izq.)</span>
+          <span class="badge bg-emerald-50 text-emerald-600 font-medium text-xs px-2.5 py-1 rounded">tCO₂e (Eje Der.)</span>
+        </div>
+      </div>
+      <div style="position: relative; height: 320px; width: 100%;">
+        <canvas id="chartCartonMensual"></canvas>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 05. LABORATORIO DE GRÁFICOS INFERENCIALES & PROYECCIONES IA -->
+    <!-- ======================================================== -->
+    <div class="mt-8 bg-gradient-to-br from-white via-slate-50 to-pt-blueLight/20 border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm">
+      
+      <!-- Encabezado de la Sección -->
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-slate-200">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="inline-flex items-center gap-1 text-[11px] font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-full bg-pt-blue text-white shadow-xs">
+              <i data-lucide="sparkles" class="w-3.5 h-3.5 text-amber-300"></i>
+              <span>Módulo IA Avanzado</span>
+            </span>
+            <span class="text-xs font-semibold text-pt-muted">• OpenAI GPT-4o & SciPy Engine</span>
+          </div>
+          <h2 class="text-xl sm:text-2xl font-black text-pt-dark tracking-tight">
+            Laboratorio de Gráficos Inferenciales & Proyecciones IA
+          </h2>
+          <p class="text-xs sm:text-sm text-pt-muted mt-1 max-w-2xl">
+            Genera modelos estadísticos inferenciales, bandas de confianza al 95%, densidades de probabilidad y dispersión multivariable renderizados en alta resolución con la identidad visual corporativa.
+          </p>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white border border-slate-200 text-xs font-semibold text-slate-700 shadow-xs">
+            <span class="w-2 h-2 rounded-full bg-pt-green animate-pulse"></span>
+            Motor Analítico Conectado
+          </span>
+        </div>
+      </div>
+
+      <!-- Barra de Configuración y Prompt -->
+      <div class="mt-6 bg-white border border-slate-200 rounded-2xl p-5 shadow-xs">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+          
+          <!-- Selector de Plantilla Rápida -->
+          <div class="lg:col-span-4">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i data-lucide="layout-template" class="w-3.5 h-3.5 text-pt-blue"></i>
+              <span>Plantilla Analítica</span>
+            </label>
+            <select 
+              id="select-plantilla-inferencial" 
+              onchange="seleccionarPlantillaInferencial(this.value)"
+              class="w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-pt-blue rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-slate-800 focus:outline-none transition-colors shadow-2xs"
+            >
+              <option value="proyeccion_95">1. Proyección de tendencia con banda de confianza (95%)</option>
+              <option value="densidad_clientes">2. Distribución de probabilidad y densidad de volumen por cliente</option>
+              <option value="anomalias_dispersion">3. Detección de anomalías y dispersión (Playo vs Cono)</option>
+              <option value="personalizado">4. Consulta analítica personalizada...</option>
+            </select>
+          </div>
+
+          <!-- Input de Prompt Libre -->
+          <div class="lg:col-span-6">
+            <label class="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+              <i data-lucide="message-square" class="w-3.5 h-3.5 text-pt-green"></i>
+              <span>Instrucción o Pregunta Estadística</span>
+            </label>
+            <div class="relative">
+              <input 
+                type="text" 
+                id="input-prompt-inferencial" 
+                placeholder="Describe el análisis estadístico o visualización que requieres..."
+                value="Proyecta la tendencia de generación con intervalo de confianza al 95% para los siguientes periodos."
+                class="w-full bg-slate-50 border border-slate-300 hover:border-slate-400 focus:border-pt-blue focus:bg-white rounded-xl px-3.5 py-2.5 text-xs sm:text-sm text-slate-800 placeholder-slate-400 focus:outline-none transition-all shadow-2xs pr-10"
+                onkeydown="if(event.key === 'Enter') generarGraficoInferencialIA()"
+              />
+              <button 
+                onclick="document.getElementById('input-prompt-inferencial').value = ''; document.getElementById('input-prompt-inferencial').focus();"
+                class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                title="Limpiar texto"
+              >
+                <i data-lucide="x" class="w-3.5 h-3.5"></i>
+              </button>
+            </div>
+          </div>
+
+          <!-- Botón de Acción -->
+          <div class="lg:col-span-2">
+            <button 
+              id="btn-generar-grafico-ia" 
+              onclick="generarGraficoInferencialIA()"
+              class="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-pt-blue to-pt-blueHover text-white font-bold text-xs sm:text-sm shadow-md shadow-pt-blue/20 hover:shadow-lg hover:shadow-pt-blue/30 active:scale-[0.98] transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <i data-lucide="sparkles" class="w-4 h-4 text-amber-300" id="icono-btn-grafico-ia"></i>
+              <span id="texto-btn-grafico-ia">Generar con IA</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Indicador de Contexto Activo -->
+        <div class="mt-3 pt-3 border-t border-slate-100 flex flex-wrap items-center justify-between text-[11px] text-slate-500 gap-2">
+          <div class="flex items-center gap-1.5">
+            <i data-lucide="filter" class="w-3 h-3 text-pt-blue"></i>
+            <span>Contexto aplicado:</span>
+            <span id="label-contexto-inferencial" class="font-semibold text-slate-700">Filtros actuales del dashboard (Sitio, Fechas y Operación)</span>
+          </div>
+          <span class="text-slate-400">Paleta corporativa: #0088D6 (Azul PT) • #78BE20 (Verde PT)</span>
+        </div>
+      </div>
+
+      <!-- Contenedor de Resultados del Gráfico IA -->
+      <div id="contenedor-resultado-inferencial" class="mt-6">
+        
+        <!-- Estado Vacío Inicial -->
+        <div id="estado-vacio-grafico-ia" class="bg-white border-2 border-dashed border-slate-200 rounded-3xl p-10 text-center flex flex-col items-center justify-center">
+          <div class="w-16 h-16 rounded-2xl bg-pt-blueLight text-pt-blue flex items-center justify-center mb-3 shadow-inner">
+            <i data-lucide="line-chart" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-base font-extrabold text-slate-800">Ningún gráfico inferencial generado aún</h3>
+          <p class="text-xs text-slate-500 max-w-md mt-1">
+            Selecciona una plantilla del menú o escribe una consulta estadística libre y presiona 
+            <strong class="text-pt-blue">"Generar con IA"</strong> para ejecutar el análisis en tiempo real sobre la base de datos de Supabase.
+          </p>
+        </div>
+
+        <!-- Estado Activo con Gráfico e Interpretación -->
+        <div id="estado-activo-grafico-ia" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          
+          <!-- Visualización del Gráfico Renderizado (8 cols) -->
+          <div class="lg:col-span-8 bg-white border border-slate-200 rounded-3xl p-5 sm:p-6 shadow-sm">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-slate-100">
+              <div class="flex items-center gap-2">
+                <span id="badge-metodo-ia" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase bg-pt-blueLight text-pt-blue border border-pt-blue/20">
+                  <i data-lucide="cpu" class="w-3 h-3"></i>
+                  <span>GPT-4o & Matplotlib</span>
+                </span>
+                <span id="tag-resolucion-ia" class="text-[11px] font-semibold text-slate-500">Render 300 DPI (Alta Definición)</span>
+              </div>
+              <button 
+                onclick="descargarGraficoIA()" 
+                class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-colors cursor-pointer"
+                title="Descargar imagen en PNG"
+              >
+                <i data-lucide="download" class="w-3.5 h-3.5 text-pt-blue"></i>
+                <span>Descargar Gráfico (PNG)</span>
+              </button>
+            </div>
+            
+            <!-- Lienzo de Imagen -->
+            <div class="w-full flex items-center justify-center bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 p-2 sm:p-3">
+              <img 
+                id="img-grafico-ia" 
+                src="" 
+                alt="Gráfico Inferencial Generado por IA" 
+                class="w-full h-auto max-h-[520px] object-contain rounded-xl shadow-xs transition-all"
+              />
+            </div>
+          </div>
+
+          <!-- Panel de Interpretación Estadística (4 cols) -->
+          <div class="lg:col-span-4 bg-white border border-slate-200 rounded-3xl p-6 shadow-sm flex flex-col justify-between h-full">
+            <div>
+              <div class="flex items-center gap-2 mb-3">
+                <div class="w-8 h-8 rounded-xl bg-emerald-50 text-pt-green flex items-center justify-center">
+                  <i data-lucide="check-circle-2" class="w-5 h-5"></i>
+                </div>
+                <div>
+                  <h4 class="font-extrabold text-sm text-slate-900">Interpretación Estadística</h4>
+                  <p class="text-[11px] text-slate-400">Hallazgos inferenciales extraídos</p>
+                </div>
+              </div>
+
+              <!-- Lista de Bullets de Interpretación -->
+              <div id="texto-interpretacion-ia" class="space-y-3 mt-4 text-xs text-slate-700 leading-relaxed">
+                <!-- Se llena dinámicamente con JavaScript -->
+              </div>
+            </div>
+
+            <!-- Footer Informativo de la Tarjeta -->
+            <div class="mt-6 pt-4 border-t border-slate-100">
+              <div class="flex items-center justify-between text-[11px] text-slate-400">
+                <span>R² y p-valor validados</span>
+                <span class="font-semibold text-pt-blue">Plastic Trade AI Lab</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <!-- ======================================================== -->
+  <!-- BOTÓN FLOTANTE Y PANEL DE CHAT DEL ASISTENTE IA (OPENAI) -->
+  <!-- ======================================================== -->
+  <!-- Botón Flotante Circular -->
+  <button 
+    id="btn-flotante-ia" 
+    onclick="abrirChatIA()" 
+    class="fixed bottom-6 right-6 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-pt-blue to-pt-blueHover text-white shadow-xl shadow-pt-blue/30 flex items-center justify-center hover:scale-110 active:scale-95 transition-all duration-200 group border-2 border-white/60"
+    title="Abrir Asistente IA - Métricas Ambientales"
+  >
+    <i data-lucide="sparkles" class="w-6 h-6 animate-pulse group-hover:rotate-12 transition-transform"></i>
+    <span class="sr-only">Asistente IA</span>
+  </button>
+
+  <!-- Panel Lateral / Drawer de Chat IA -->
+  <div id="drawer-chat-ia" class="hidden fixed inset-0 z-50 flex justify-end bg-slate-900/30 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white w-full max-w-md h-full shadow-2xl flex flex-col justify-between animate-in slide-in-from-right duration-300 border-l border-slate-200">
+      
+      <!-- Encabezado del Chat -->
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-gradient-to-r from-pt-surface to-pt-blueLight/20">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-pt-blue to-pt-blueHover text-white flex items-center justify-center shadow-md shadow-pt-blue/20">
+            <i data-lucide="bot" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <div class="flex items-center gap-2">
+              <h3 class="font-extrabold text-sm text-pt-dark">Asistente IA</h3>
+              <span class="text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded-md bg-pt-blue text-white">OpenAI</span>
+            </div>
+            <p class="text-[11px] text-pt-muted">Métricas Ambientales y Sostenibilidad</p>
+          </div>
+        </div>
+        <button 
+          onclick="cerrarChatIA()" 
+          class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors"
+        >
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Cuerpo / Historial de Mensajes -->
+      <div id="chat-historial" class="flex-1 p-5 overflow-y-auto space-y-4 bg-slate-50/50 text-xs">
+        <!-- Mensaje de bienvenida del bot -->
+        <div class="flex items-start gap-2.5">
+          <div class="w-7 h-7 rounded-xl bg-pt-blue text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-3.5 text-slate-700 shadow-sm max-w-[85%] leading-relaxed">
+            Hola, soy tu copiloto analítico de <strong>Plastic Trade</strong>. Estoy conectado en tiempo real a Supabase para responder consultas sobre volumen de residuos, clientes y trazabilidad con estricta veracidad basada en datos oficiales. ¿Qué métrica deseas consultar?
+          </div>
+        </div>
+
+        <!-- Chips de Preguntas Sugeridas -->
+        <div class="pt-2">
+          <p class="text-[10px] font-bold uppercase text-slate-400 mb-2">Preguntas Sugeridas:</p>
+          <div class="flex flex-col gap-1.5">
+            <button 
+              type="button" 
+              onclick="usarPreguntaSugerida(this)" 
+              class="text-left px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:border-pt-blue hover:text-pt-blue transition-colors text-[11px] shadow-2xs"
+            >
+              ¿Cuáles son los 3 clientes con mayor volumen en Kg?
+            </button>
+            <button 
+              type="button" 
+              onclick="usarPreguntaSugerida(this)" 
+              class="text-left px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:border-pt-blue hover:text-pt-blue transition-colors text-[11px] shadow-2xs"
+            >
+              ¿Cuál es el desglose de volumen entre Entradas y Salidas?
+            </button>
+            <button 
+              type="button" 
+              onclick="usarPreguntaSugerida(this)" 
+              class="text-left px-3 py-2 rounded-xl bg-white border border-slate-200 text-slate-600 hover:border-pt-blue hover:text-pt-blue transition-colors text-[11px] shadow-2xs"
+            >
+              ¿Cuántos kilos totales de Playo y Cono tenemos registrados?
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Barra de Envío del Chat -->
+      <div class="p-4 bg-white border-t border-slate-100">
+        <form id="form-chat-ia" onsubmit="enviarMensajeIA(event)" class="flex items-center gap-2">
+          <input 
+            type="text" 
+            id="input-chat-ia" 
+            placeholder="Pregunta sobre tus métricas ambientales..." 
+            class="flex-1 text-xs px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 focus:bg-white focus:outline-none focus:border-pt-blue shadow-inner"
+          />
+          <button 
+            type="submit" 
+            class="w-9 h-9 rounded-xl bg-pt-blue hover:bg-pt-blueHover text-white flex items-center justify-center transition-colors shadow-sm shrink-0"
+          >
+            <i data-lucide="send" class="w-4 h-4"></i>
+          </button>
+        </form>
+        <span class="text-[10px] text-slate-400 block mt-2 text-center">
+          Conectado a Supabase en tiempo real • Powered by OpenAI gpt-4o-mini
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- VISTA 03: DATOS HISTÓRICOS Y AUDITORÍA (MÓDULO 03) -->
+  <!-- ======================================================== -->
+  <main id="view-historico" class="hidden w-full max-w-6xl mx-auto bg-white/95 border border-slate-200/80 rounded-[2.5rem] p-6 sm:p-10 md:p-12 shadow-xl shadow-slate-200/50 backdrop-blur-md transition-all duration-300">
+    
+    <!-- BARRA SUPERIOR DE NAVEGACIÓN Y TÍTULO -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 pb-6 border-b border-slate-100">
+      <div class="flex items-center gap-4">
+        <button 
+          onclick="volverAlHub()" 
+          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-slate-100 hover:bg-slate-200/80 text-pt-dark font-bold text-xs uppercase tracking-wider transition-all duration-200 hover:-translate-x-0.5 active:scale-95"
+          title="Regresar al menú principal"
+        >
+          <i data-lucide="arrow-left" class="w-4 h-4 text-pt-blue"></i>
+          <span>Volver al inicio</span>
+        </button>
+        
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-slate-100 text-slate-700">
+              MÓDULO 03 • AUDITORÍA & HISTORIAL
+            </span>
+            <span class="text-xs text-pt-muted font-medium">Base de Datos Supabase</span>
+          </div>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-pt-dark mt-1">
+            Datos Históricos y Auditoría
+          </h1>
+        </div>
+      </div>
+
+      <!-- BOTONES DE EXPORTACIÓN Y RECARGA -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button 
+          type="button"
+          onclick="recargarHistorico()" 
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs transition-colors shadow-sm"
+          title="Recargar datos del servidor"
+        >
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5 text-pt-blue" id="icon-recargar-hist"></i>
+          <span>Actualizar</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="descargarExcelHistorico()" 
+          class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-pt-green text-white font-bold text-xs hover:bg-pt-greenHover transition-all shadow-sm active:scale-95"
+          title="Descargar histórico filtrado en formato Excel (.xlsx)"
+        >
+          <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+          <span>Exportar Histórico Filtrado (Excel)</span>
+        </button>
+
+        <button 
+          type="button"
+          onclick="descargarCSVHistorico()" 
+          class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-slate-200 bg-white text-pt-dark font-semibold text-xs hover:bg-slate-50 transition-all shadow-sm"
+          title="Descargar histórico filtrado en formato CSV"
+        >
+          <i data-lucide="download" class="w-3.5 h-3.5 text-slate-500"></i>
+          <span>CSV</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BARRA DE FILTROS REACTIVA -->
+    <div class="bg-pt-surface border border-slate-200/90 rounded-2xl p-5 mb-6 shadow-sm">
+      <div class="flex items-center justify-between mb-3 pb-2 border-b border-slate-200/50">
+        <span class="text-xs font-bold uppercase tracking-wider text-pt-dark flex items-center gap-1.5">
+          <i data-lucide="filter" class="w-3.5 h-3.5 text-pt-blue"></i>
+          Filtros de Búsqueda Avanzada
+        </span>
+        <button 
+          type="button"
+          onclick="limpiarFiltrosHistorico()" 
+          class="text-xs text-pt-muted hover:text-rose-600 font-semibold transition-colors flex items-center gap-1"
+        >
+          <i data-lucide="rotate-ccw" class="w-3 h-3"></i>
+          <span>Limpiar Filtros</span>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
+        <!-- Filtro Rango Fechas: Desde -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Fecha Desde</label>
+          <input 
+            type="date" 
+            id="filtro-hist-desde" 
+            onchange="filtrarHistoricoLocal()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm"
+          />
+        </div>
+
+        <!-- Filtro Rango Fechas: Hasta -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Fecha Hasta</label>
+          <input 
+            type="date" 
+            id="filtro-hist-hasta" 
+            onchange="filtrarHistoricoLocal()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm"
+          />
+        </div>
+
+        <!-- Filtro Tipo de Residuo (6 Categorías Oficiales) -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Tipo de Residuo</label>
+          <select 
+            id="filtro-hist-residuo" 
+            onchange="filtrarHistoricoLocal()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium"
+          >
+            <option value="Todos">Todos los residuos</option>
+            <option value="Playo">Playo</option>
+            <option value="Cono">Cono</option>
+            <option value="Cartón">Cartón</option>
+            <option value="Chatarra">Chatarra</option>
+            <option value="Tarima">Tarima</option>
+            <option value="Madera">Madera</option>
+          </select>
+        </div>
+
+        <!-- Filtro Tipo de Operación -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Operación</label>
+          <select 
+            id="filtro-hist-operacion" 
+            onchange="filtrarHistoricoLocal()" 
+            class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm font-medium"
+          >
+            <option value="Todas">Todas (Entradas y Salidas)</option>
+            <option value="ENTRADAS">Solo ENTRADAS</option>
+            <option value="SALIDAS">Solo SALIDAS</option>
+          </select>
+        </div>
+
+        <!-- Filtro Búsqueda por Sitio / Cliente / Proveedor -->
+        <div>
+          <label class="block text-[11px] font-bold text-slate-600 mb-1">Sitio / Cliente</label>
+          <div class="relative">
+            <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2"></i>
+            <input 
+              type="text" 
+              id="filtro-hist-sitio" 
+              placeholder="Buscar sitio..." 
+              oninput="filtrarHistoricoLocal()" 
+              class="w-full text-xs pl-8 pr-3 py-2 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-pt-blue shadow-sm"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESUMEN EN TIEMPO REAL / MÉTRICAS RÁPIDAS -->
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 p-4 rounded-2xl bg-slate-50 border border-slate-200/80">
+      <div class="flex items-center gap-2">
+        <span class="w-2.5 h-2.5 rounded-full bg-pt-blue animate-pulse"></span>
+        <span id="contador-historico-texto" class="text-xs font-bold text-pt-dark">
+          Cargando registros históricos...
+        </span>
+      </div>
+      <div id="metricas-historico-pills" class="flex flex-wrap items-center gap-2 text-xs">
+        <!-- Píldoras de métricas dinámicas -->
+      </div>
+    </div>
+
+    <!-- TABLA DE AUDITORÍA E HISTORIAL (10 COLUMNAS) -->
+    <div class="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm max-h-[580px]">
+      <table class="w-full text-left text-xs border-collapse">
+        <thead class="bg-slate-100/90 text-pt-dark sticky top-0 z-10 shadow-sm uppercase text-[11px] tracking-wider">
+          <tr class="divide-x divide-slate-200 font-bold border-b border-slate-200">
+            <th class="px-3.5 py-3 text-center w-28">Fecha Mov.</th>
+            <th class="px-3 py-3 text-center w-24">Operación</th>
+            <th class="px-4 py-3">Sitio / Cliente</th>
+            <th class="px-3.5 py-3">Tipo Residuo</th>
+            <th class="px-3.5 py-3 text-right w-24">Kg</th>
+            <th class="px-3.5 py-3 text-right w-20">Pz</th>
+            <th class="px-3.5 py-3 text-right w-24">Tarimas</th>
+            <th class="px-4 py-3">Archivo Origen</th>
+            <th class="px-3.5 py-3 text-center w-36">Fecha Carga</th>
+            <th class="px-3 py-3 text-center w-16">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tbody-historico" class="divide-y divide-slate-100 text-slate-700">
+          <tr>
+            <td colspan="10" class="px-6 py-12 text-center text-slate-400">
+              <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-pt-blue"></i>
+              Cargando historial desde la base de datos...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+
+
+  <!-- MODAL: CONFIRMACIÓN DE ELIMINACIÓN DE REGISTRO HISTÓRICO -->
+  <div id="modal-eliminar" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white rounded-[2rem] max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in-95 duration-200">
+      <div class="w-12 h-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center mb-4">
+        <i data-lucide="alert-triangle" class="w-6 h-6"></i>
+      </div>
+      <h3 class="text-lg font-extrabold text-pt-dark mb-1">¿Eliminar registro histórico?</h3>
+      <p id="modal-eliminar-detalle" class="text-xs text-pt-muted leading-relaxed mb-6">
+        Esta acción eliminará de forma permanente el registro seleccionado de la base de datos de Supabase.
+      </p>
+      <div class="flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          onclick="cerrarModalEliminar()" 
+          class="px-4 py-2.5 rounded-xl border border-slate-200 text-slate-700 font-bold text-xs hover:bg-slate-50 transition-colors"
+        >
+          Cancelar
+        </button>
+        <button 
+          id="btn-confirmar-eliminar" 
+          type="button" 
+          class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs transition-colors shadow-sm"
+        >
+          Sí, eliminar registro
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL: CARGAR DATOS PARA PRESENTACIÓN AISLADA (SANDBOX)   -->
+  <!-- ======================================================== -->
+  <div id="modal-presentacion" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs transition-opacity duration-300">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-7 shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Botón de Cerrar Modal -->
+      <button 
+        type="button" 
+        onclick="cerrarModalPresentacion()" 
+        class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 transition-colors p-1.5 rounded-full hover:bg-slate-100 cursor-pointer"
+        title="Cerrar ventana"
+      >
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
+      <!-- Encabezado del Modal -->
+      <div class="flex items-center gap-3 mb-3">
+        <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center shrink-0 border border-amber-200 shadow-2xs">
+          <i data-lucide="presentation" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <span class="text-[10px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800">
+            Aislamiento Estricto
+          </span>
+          <h3 class="text-lg font-black text-slate-900 mt-0.5">Cargar Datos para Presentación Aislada</h3>
+        </div>
+      </div>
+
+      <p class="text-xs text-slate-600 leading-relaxed mb-5">
+        Sube un archivo Excel (.xlsx). Los gráficos y el asistente IA responderán exclusivamente a estos datos sin alterar Supabase.
+      </p>
+
+      <!-- Zona de Carga Drag & Drop -->
+      <div 
+        id="dropzone-presentacion" 
+        class="border-2 border-dashed border-slate-300 hover:border-pt-blue rounded-2xl p-6 text-center cursor-pointer transition-colors bg-slate-50/70 hover:bg-pt-blueLight/20 group"
+        onclick="document.getElementById('input-file-presentacion').click()"
+        ondragover="event.preventDefault(); this.classList.add('border-pt-blue', 'bg-pt-blueLight/30')"
+        ondragleave="this.classList.remove('border-pt-blue', 'bg-pt-blueLight/30')"
+        ondrop="event.preventDefault(); this.classList.remove('border-pt-blue', 'bg-pt-blueLight/30'); onDropArchivoPresentacion(event)"
+      >
+        <input 
+          type="file" 
+          id="input-file-presentacion" 
+          accept=".xlsx, .xls" 
+          class="hidden" 
+          onchange="onArchivoPresentacionSeleccionado(this.files)"
+        />
+        <div class="w-12 h-12 rounded-2xl bg-white border border-slate-200 text-pt-blue flex items-center justify-center mx-auto mb-3 shadow-2xs group-hover:scale-105 transition-transform">
+          <i data-lucide="upload-cloud" class="w-6 h-6"></i>
+        </div>
+        <p class="text-xs font-bold text-slate-800">Haz clic para seleccionar o arrastra tu archivo Excel aquí</p>
+        <p class="text-[11px] text-slate-400 mt-1">Formato soportado: .xlsx o .xls</p>
+        
+        <div id="info-archivo-presentacion" class="hidden mt-3 pt-3 border-t border-slate-200 text-xs font-semibold text-pt-blue flex items-center justify-center gap-1.5">
+          <i data-lucide="file-spreadsheet" class="w-4 h-4"></i>
+          <span id="txt-nombre-archivo-presentacion">archivo.xlsx</span>
+        </div>
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="mt-6 flex items-center justify-end gap-3">
+        <button 
+          type="button" 
+          onclick="cerrarModalPresentacion()" 
+          class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer"
+        >
+          Cancelar
+        </button>
+        <button 
+          type="button" 
+          id="btn-procesar-presentacion" 
+          onclick="procesarYProyectarPresentacion()" 
+          disabled 
+          class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white text-xs font-bold shadow-md hover:shadow-lg disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer"
+        >
+          <i data-lucide="play" class="w-4 h-4" id="icon-btn-procesar-pres"></i>
+          <span id="txt-btn-procesar-pres">Procesar y Proyectar</span>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ======================================================== -->
+  <!-- MODAL: SELECCIÓN DE TIPO DE OPERACIÓN (ENTRADAS / SALIDAS) -->
+  <!-- ======================================================== -->
+  <div id="modal-operacion" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-sm transition-opacity duration-300">
+    <div class="bg-white rounded-[2rem] max-w-xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative animate-in fade-in zoom-in-95 duration-200">
+      
+      <!-- Botón cerrar (X) -->
+      <button 
+        type="button" 
+        onclick="cerrarModalOperacion()" 
+        class="absolute top-5 right-5 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-colors"
+        title="Cerrar modal"
+      >
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <!-- Encabezado del Modal -->
+      <div class="mb-6">
+        <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pt-blueLight text-pt-blue text-[11px] font-extrabold uppercase tracking-wider mb-2">
+          <i data-lucide="layers" class="w-3.5 h-3.5"></i>
+          <span>Configuración de Consolidado</span>
+        </div>
+        <h2 class="text-2xl font-extrabold text-pt-dark">
+          ¿Qué tipo de operación deseas consolidar?
+        </h2>
+        <p class="text-xs sm:text-sm text-pt-muted mt-1 leading-relaxed">
+          Selecciona el flujo logístico para preparar las fuentes de datos y estructurar el concentrado de 6 columnas.
+        </p>
+      </div>
+
+      <!-- BOTONES GRANDES E INTUITIVOS DE OPERACIÓN -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        
+        <!-- OPCIÓN A: ENTRADAS -->
+        <button 
+          type="button" 
+          onclick="seleccionarOperacion('ENTRADAS')"
+          class="group text-left p-5 rounded-2xl border-2 border-slate-200 hover:border-pt-blue bg-white hover:bg-pt-blueLight/30 transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-pt-blueLight flex items-center justify-center text-pt-blue group-hover:bg-pt-blue group-hover:text-white transition-colors">
+                <i data-lucide="inbox" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-blue-100 text-pt-blue">
+                3 Fuentes
+              </span>
+            </div>
+            <h3 class="font-extrabold text-base text-pt-dark group-hover:text-pt-blue transition-colors mb-1.5">
+              ENTRADAS
+            </h3>
+            <p class="text-[11px] text-pt-muted leading-relaxed">
+              Consolida las 3 fuentes operativas: <strong class="text-pt-dark">Almacén MP</strong> (hoja ENTRADAS MP), <strong class="text-pt-dark">Sostenibilidad</strong> (hoja Pernod Ricard) y <strong class="text-pt-dark">Uziel</strong>.
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-bold text-pt-blue">
+            <span>Iniciar Entradas</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </button>
+
+        <!-- OPCIÓN B: SALIDAS -->
+        <button 
+          type="button" 
+          onclick="seleccionarOperacion('SALIDAS')"
+          class="group text-left p-5 rounded-2xl border-2 border-slate-200 hover:border-pt-green bg-white hover:bg-pt-greenLight/30 transition-all duration-200 hover:-translate-y-1 hover:shadow-md flex flex-col justify-between"
+        >
+          <div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="w-12 h-12 rounded-xl bg-pt-greenLight flex items-center justify-center text-pt-green group-hover:bg-pt-green group-hover:text-white transition-colors">
+                <i data-lucide="truck" class="w-6 h-6"></i>
+              </div>
+              <span class="text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-pt-greenHover">
+                1 Fuente
+              </span>
+            </div>
+            <h3 class="font-extrabold text-base text-pt-dark group-hover:text-pt-greenHover transition-colors mb-1.5">
+              SALIDAS
+            </h3>
+            <p class="text-[11px] text-pt-muted leading-relaxed">
+              Procesa exclusivamente las entregas de producto terminado desde <strong class="text-pt-dark">Facturación</strong> (hoja Programa entregas).
+            </p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100 flex items-center text-xs font-bold text-pt-greenHover">
+            <span>Iniciar Salidas</span>
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 ml-1 transition-transform group-hover:translate-x-1"></i>
+          </div>
+        </button>
+
+      </div>
+    </div>
+  </div>
+
+
+  <!-- FOOTER CORPORATIVO -->
+  <footer class="w-full max-w-6xl mx-auto py-4 mt-6 text-center text-xs text-pt-muted flex flex-col sm:flex-row items-center justify-between gap-2 border-t border-slate-200/60">
+    <div class="flex items-center gap-1.5">
+      <span class="font-bold text-pt-blue">PLASTIC</span>
+      <span class="font-bold text-pt-green">TRADE</span>
+      <span class="text-slate-400">• Smart Packaging</span>
+    </div>
+    <p class="text-slate-500">Métricas Ambientales y Concentrado de Materiales Valorizables &copy; 2026</p>
+  </footer>
+
+
+  <!-- ======================================================== -->
+  <!-- SCRIPT DE INTERACCIÓN CLIENTE (SPA & INTEGRACIÓN REST) -->
+  <!-- ======================================================== -->
+  <script>
+    // Inicializar iconos de Lucide al cargar
+    lucide.createIcons();
+
+    // Detección automática y robusta del endpoint backend:
+    // Si se abre localmente (file://), conectarse a http://127.0.0.1:8000.
+    // Si se accede vía HTTP o HTTPS (localhost, LAN o túnel público trycloudflare),
+    // usar ruta relativa vacía '' para resolver dinámicamente contra window.location.origin sin problemas de CORS ni puertos.
+    const API_BASE = (window.location.protocol === 'file:')
+      ? 'http://127.0.0.1:8000'
+      : '';
+
+    // Estado global de la aplicación SPA con soporte para múltiples archivos por fuente
+    const appState = {
+      tipoOperacion: 'ENTRADAS',  // 'ENTRADAS' | 'SALIDAS'
+      archivos: {
+        almacen: [],
+        facturacion: [],
+        sostenibilidad: [],
+        uziel: []
+      },
+      usarPrueba: false,
+      registros: [],
+      registrosFiltrados: [],
+      salidasDetalle: [],
+      salidasDetalleFiltrados: []
+    };
+
+    // Comprobación periódica del estado del servidor backend
+    async function verificarSaludBackend() {
+      const badge = document.getElementById('backend-status-badge');
+      try {
+        const res = await fetch(`${API_BASE}/api/health`, { cache: 'no-cache' });
+        if (res.ok && badge) {
+          badge.innerHTML = `
+            <span class="w-2.5 h-2.5 rounded-full bg-pt-green animate-pulse"></span>
+            <span class="hidden sm:inline">Servidor Conectado</span>
+            <span class="sm:hidden">Online</span>
+          `;
+        } else if (badge) {
+          badge.innerHTML = `
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <span class="text-rose-600 font-bold">Servidor Desconectado</span>
+          `;
+        }
+      } catch (e) {
+        if (badge) {
+          badge.innerHTML = `
+            <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+            <span class="text-rose-600 font-bold">Servidor Desconectado</span>
+          `;
+        }
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      verificarSaludBackend();
+      setInterval(verificarSaludBackend, 15000);
+    });
+
+    // ----------------------------------------------------
+    // CONTROL DEL MODAL DE OPERACIÓN
+    // ----------------------------------------------------
+    function abrirModalOperacion() {
+      const modal = document.getElementById('modal-operacion');
+      modal.classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function cerrarModalOperacion() {
+      const modal = document.getElementById('modal-operacion');
+      modal.classList.add('hidden');
+    }
+
+    function seleccionarOperacion(tipo) {
+      appState.tipoOperacion = tipo;
+      cerrarModalOperacion();
+      transicionAHomologacion(tipo);
+    }
+
+    // ----------------------------------------------------
+    // TRANSICIÓN SPA ENTRE VISTAS
+    // ----------------------------------------------------
+    function transicionAHomologacion(tipo) {
+      document.getElementById('view-hub').classList.add('hidden');
+      const viewH = document.getElementById('view-homologacion');
+      viewH.classList.remove('hidden');
+
+      const badge = document.getElementById('badge-tipo-operacion');
+      badge.textContent = tipo;
+      if (tipo === 'ENTRADAS') {
+        badge.className = "px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-pt-blueLight text-pt-blue";
+      } else {
+        badge.className = "px-3 py-0.5 rounded-full text-[11px] font-extrabold uppercase tracking-wider bg-pt-greenLight text-pt-greenHover";
+      }
+
+      const boxAlmacen = document.getElementById('box-almacen');
+      const boxFacturacion = document.getElementById('box-facturacion');
+      const boxSostenibilidad = document.getElementById('box-sostenibilidad');
+      const boxUziel = document.getElementById('box-uziel');
+      const descAlmacen = document.getElementById('desc-almacen');
+      const descFacturacion = document.getElementById('desc-facturacion');
+      const gridCajas = document.getElementById('grid-cajas-archivos');
+
+      if (tipo === 'ENTRADAS') {
+        boxAlmacen.classList.remove('hidden');
+        boxSostenibilidad.classList.remove('hidden');
+        boxUziel.classList.remove('hidden');
+        boxFacturacion.classList.add('hidden');
+        descAlmacen.innerHTML = 'Hoja: <span class="font-semibold text-pt-dark">ENTRADAS MP</span> (Fecha B, Proveedor F, Material K, Pz M, Kg O).';
+        gridCajas.className = "grid grid-cols-1 sm:grid-cols-3 gap-4";
+        document.getElementById('subtitulo-cajas').textContent = "Selecciona o arrastra los archivos correspondientes a las 3 fuentes de ENTRADAS (Almacén, Sostenibilidad, Uziel).";
+      } else {
+        boxAlmacen.classList.add('hidden');
+        boxSostenibilidad.classList.add('hidden');
+        boxUziel.classList.add('hidden');
+        boxFacturacion.classList.remove('hidden');
+        if (descFacturacion) {
+          descFacturacion.innerHTML = 'Hoja: <span class="font-semibold text-pt-dark">PROGRAMA_ENTREGAS</span> (Fila 10+, Status \'Entregado\', Fecha E, Cliente G, Espec L, Pz O).';
+        }
+        gridCajas.className = "grid grid-cols-1 max-w-lg mx-auto gap-4";
+        document.getElementById('subtitulo-cajas').textContent = "Selecciona o arrastra el archivo de Facturación para procesar SALIDAS (Programa entregas).";
+      }
+
+      actualizarContadorTotal();
+      lucide.createIcons();
+    }
+
+    function volverAlHub() {
+      document.getElementById('view-homologacion').classList.add('hidden');
+      document.getElementById('view-historico').classList.add('hidden');
+      const viewDash = document.getElementById('view-dashboard');
+      if (viewDash) viewDash.classList.add('hidden');
+      document.getElementById('view-hub').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function navegarA(modulo) {
+      if (modulo === 'reportes') {
+        abrirModalOperacion();
+      } else if (modulo === 'analisis' || modulo === 'dashboard') {
+        abrirVistaDashboard();
+      } else if (modulo === 'trazabilidad' || modulo === 'historico') {
+        abrirVistaHistorico();
+      } else {
+        mostrarNotificacion(`Navegando a '${modulo}'.`, 'info');
+      }
+    }
+
+    function abrirVistaDashboard() {
+      document.getElementById('view-hub').classList.add('hidden');
+      document.getElementById('view-homologacion').classList.add('hidden');
+      document.getElementById('view-historico').classList.add('hidden');
+      document.getElementById('view-dashboard').classList.remove('hidden');
+      lucide.createIcons();
+      cargarMetricasDashboard();
+    }
+
+    function abrirVistaHistorico() {
+      document.getElementById('view-hub').classList.add('hidden');
+      document.getElementById('view-homologacion').classList.add('hidden');
+      const viewDash = document.getElementById('view-dashboard');
+      if (viewDash) viewDash.classList.add('hidden');
+      document.getElementById('view-historico').classList.remove('hidden');
+      lucide.createIcons();
+      cargarHistorico();
+    }
+
+    // ----------------------------------------------------
+    // CONTROL DEL MÓDULO 02: MÉTRICAS Y DASHBOARD (CHART.JS)
+    // ----------------------------------------------------
+    // Estado del módulo de Métricas & Dashboard y Modo Presentación Aislada
+    window.datosPresentacionAislada = null;
+    let archivoPresentacionSeleccionado = null;
+
+    const dashboardState = {
+      cargando: false,
+      charts: {
+        co2Arboles: null,
+        energiaAgua: null,
+        combustible: null,
+        playoDona: null,
+        tendencia: null,
+        unificadoResiduoCO2: null,
+        playoMensual: null,
+        cartonMensual: null,
+        evolucionMensual: null,
+        emisionesMensuales: null
+      },
+      sitiosCargados: false
+    };
+
+    // ----------------------------------------------------
+        function formatearCifraKpi(valor) {
+      if (valor === null || valor === undefined || isNaN(valor)) return "N/A";
+      const num = Number(valor);
+      if (num >= 1000000) {
+        return `${(num / 1000000).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 })} M`;
+      }
+      return num.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
+
+    function actualizarTarjetasKPI(kpis = {}, totales = {}) {
+      const tco2eElem = document.getElementById('kpi-tco2e');
+      if (tco2eElem) {
+        let vTco2e = 0;
+        if (kpis.total_tco2e !== undefined && kpis.total_tco2e !== null && (kpis.tco2e_sin_emitir === undefined || kpis.tco2e_sin_emitir === null)) {
+          vTco2e = Number(kpis.total_tco2e);
+        } else if (kpis.tco2e_sin_emitir !== undefined && kpis.tco2e_sin_emitir !== null) {
+          vTco2e = Number(kpis.tco2e_sin_emitir);
+        } else if (totales.kg_playo !== undefined || totales.kg_cono !== undefined) {
+          const tco2e_playo = (Number(totales.kg_playo || 0) / 1000.0) * 3.5;
+          const tco2e_cono = (Number(totales.kg_cono || 0) * 1.198) / 1000.0;
+          vTco2e = tco2e_playo + tco2e_cono;
+        }
+        tco2eElem.textContent = formatearCifraKpi(vTco2e);
+        tco2eElem.title = vTco2e.toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + " tCO2e";
+      }
+      
+      const celulosaInactiva = (kpis.celulosa_activa === false || kpis.arboles_sin_talar === null || kpis.arboles_sin_talar === undefined);
+      
+      const kpisMap = [
+        { id: 'kpi-arboles', val: kpis.arboles_sin_talar, sufijo: ' árboles' },
+        { id: 'kpi-energia', val: kpis.energia_kwh, sufijo: ' kW/hr' },
+        { id: 'kpi-agua', val: kpis.agua_litros, sufijo: ' Litros' },
+        { id: 'kpi-combustible', val: kpis.combustible_litros, sufijo: ' Litros' }
+      ];
+
+      kpisMap.forEach(item => {
+        const el = document.getElementById(item.id);
+        if (!el) return;
+        if (celulosaInactiva) {
+          el.textContent = "N/A";
+          el.title = "No aplica para este residuo";
+        } else {
+          const num = Number(item.val || 0);
+          el.textContent = formatearCifraKpi(num);
+          el.title = num.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + item.sufijo;
+        }
+      });
+    }
+
+    // CONTROL DEL MODO PRESENTACIÓN AISLADA (SANDBOX)
+    // ----------------------------------------------------
+    function abrirModalPresentacion() {
+      const modal = document.getElementById('modal-presentacion');
+      if (modal) {
+        modal.classList.remove('hidden');
+        lucide.createIcons();
+      }
+    }
+
+    function cerrarModalPresentacion() {
+      const modal = document.getElementById('modal-presentacion');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function onArchivoPresentacionSeleccionado(files) {
+      if (!files || files.length === 0) return;
+      archivoPresentacionSeleccionado = files[0];
+      const info = document.getElementById('info-archivo-presentacion');
+      const txt = document.getElementById('txt-nombre-archivo-presentacion');
+      const btn = document.getElementById('btn-procesar-presentacion');
+      if (txt) txt.textContent = archivoPresentacionSeleccionado.name;
+      if (info) info.classList.remove('hidden');
+      if (btn) btn.disabled = false;
+      lucide.createIcons();
+    }
+
+    function onDropArchivoPresentacion(e) {
+      if (e.dataTransfer && e.dataTransfer.files) {
+        onArchivoPresentacionSeleccionado(e.dataTransfer.files);
+      }
+    }
+
+    async function procesarYProyectarPresentacion() {
+      if (!archivoPresentacionSeleccionado) return;
+
+      const btn = document.getElementById('btn-procesar-presentacion');
+      const icon = document.getElementById('icon-btn-procesar-pres');
+      const txt = document.getElementById('txt-btn-procesar-pres');
+
+      btn.disabled = true;
+      const txtOrig = txt.textContent;
+      txt.textContent = 'Procesando en memoria...';
+      if (icon) icon.classList.add('animate-spin');
+
+      try {
+        const formData = new FormData();
+        formData.append('file', archivoPresentacionSeleccionado);
+
+        const res = await fetch(`${API_BASE}/api/presentacion/cargar`, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!res.ok) {
+          const err = await res.json().catch(() => ({}));
+          throw new Error(err.detail || `Error HTTP ${res.status}`);
+        }
+
+        const data = await res.json();
+        window.datosPresentacionAislada = data;
+
+        // 1. Actualizar las 5 tarjetas de impacto ecológico
+        actualizarTarjetasKPI(data.kpis_ecologicos, data.totales);
+
+        // 2. Actualizar resumen de volumen y materiales
+        const tot = data.totales || {};
+        document.getElementById('dash-total-kg').textContent = 
+          Number(tot.total_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Kg';
+        document.getElementById('dash-kg-playo').textContent = Number(tot.kg_playo || 0).toLocaleString();
+        document.getElementById('dash-kg-cono').textContent = Number(tot.kg_cono || 0).toLocaleString();
+        document.getElementById('dash-kg-carton').textContent = Number(tot.kg_carton || 0).toLocaleString();
+        document.getElementById('dash-kg-chatarra').textContent = Number(tot.kg_chatarra || 0).toLocaleString();
+        const pzTarimas = Number(tot.total_tarimas || 0);
+        document.getElementById('dash-total-tarimas').textContent = (pzTarimas * 25).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Kg';
+        document.getElementById('dash-total-pz').textContent = Number(tot.total_pz || 0).toLocaleString();
+
+        // 3. Renderizar Rankings Top 3 más y menos (adaptable a monositio)
+        const esMonositio1 = Boolean(data.es_monositio || (data.sitios_disponibles && data.sitios_disponibles.length <= 1));
+        renderizarRankings(data.top_mas_generan || [], data.top_menos_generan || [], esMonositio1);
+
+        // 4. Destruir y recrear los gráficos de Chart.js
+        renderizarGraficosDashboard(data);
+
+        // 5. Poblar select de sitios con los datos de presentación
+        const selectSitio = document.getElementById('dash-filtro-sitio');
+        if (selectSitio && data.sitios_disponibles) {
+          selectSitio.innerHTML = '<option value="Todos">Todos los Sitios (Presentación)</option>';
+          data.sitios_disponibles.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            selectSitio.appendChild(opt);
+          });
+        }
+
+        // 5.B Reemplazo del filtro de fechas por selector de mes en Modo Presentación
+        const contDesde = document.getElementById('contenedor-filtro-desde');
+        const contHasta = document.getElementById('contenedor-filtro-hasta');
+        const contMes = document.getElementById('filtro-contenedor-mes');
+        if (contDesde) contDesde.style.display = 'none';
+        if (contHasta) contHasta.style.display = 'none';
+        if (contMes) {
+          contMes.style.display = 'block';
+          const fMes = document.getElementById('filtro-mes');
+          if (fMes) fMes.value = 'TODOS';
+        }
+
+        // 6. Ocultar modal y mostrar banner activo
+        cerrarModalPresentacion();
+        const banner = document.getElementById('banner-modo-presentacion');
+        const lblArchivo = document.getElementById('lbl-nombre-archivo-presentacion');
+        if (lblArchivo) lblArchivo.textContent = data.nombre_archivo || archivoPresentacionSeleccionado.name;
+        if (banner) banner.classList.remove('hidden');
+
+        mostrarNotificacion(`Modo Presentación Aislada activo: ${data.nombre_archivo || archivoPresentacionSeleccionado.name}`, 'exito');
+
+      } catch (err) {
+        console.error("Error al cargar presentación aislada:", err);
+        alert(`No fue posible procesar el archivo: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        txt.textContent = txtOrig;
+        if (icon) icon.classList.remove('animate-spin');
+        lucide.createIcons();
+      }
+    }
+
+    function salirModoPresentacion() {
+      window.datosPresentacionAislada = null;
+      archivoPresentacionSeleccionado = null;
+      
+      // Ocultar banner
+      const banner = document.getElementById('banner-modo-presentacion');
+      if (banner) banner.classList.add('hidden');
+
+      // Limpiar input del modal
+      const info = document.getElementById('info-archivo-presentacion');
+      if (info) info.classList.add('hidden');
+      const input = document.getElementById('input-file-presentacion');
+      if (input) input.value = '';
+      const btn = document.getElementById('btn-procesar-presentacion');
+      if (btn) btn.disabled = true;
+
+      // Resetear indicador de sitios para recargar desde Supabase
+      dashboardState.sitiosCargados = false;
+
+      // Restaurar filtros de fecha y ocultar selector de mes
+      const contDesde = document.getElementById('contenedor-filtro-desde');
+      const contHasta = document.getElementById('contenedor-filtro-hasta');
+      const contMes = document.getElementById('filtro-contenedor-mes');
+      if (contDesde) contDesde.style.display = 'block';
+      if (contHasta) contHasta.style.display = 'block';
+      if (contMes) {
+        contMes.style.display = 'none';
+        const fMes = document.getElementById('filtro-mes');
+        if (fMes) fMes.value = 'TODOS';
+      }
+
+      // Restaurar datos reales desde Supabase
+      cargarMetricasDashboard();
+      mostrarNotificacion('Modo Presentación finalizado. Datos oficiales de producción restaurados.', 'info');
+    }
+
+    async function filtrarPresentacionAislada() {
+      if (!window.datosPresentacionAislada || !window.datosPresentacionAislada.session_id) return;
+      const selectSitio = document.getElementById('dash-filtro-sitio');
+      const sitio = selectSitio ? selectSitio.value : 'Todos';
+      const desde = document.getElementById('dash-filtro-desde')?.value || '';
+      const hasta = document.getElementById('dash-filtro-hasta')?.value || '';
+      const operacion = document.getElementById('dash-filtro-operacion')?.value || 'ENTRADAS';
+
+      try {
+        const res = await fetch(`${API_BASE}/api/presentacion/metricas`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            session_id: window.datosPresentacionAislada.session_id,
+            sitio: sitio,
+            fecha_inicio: desde,
+            fecha_fin: hasta,
+            tipo_operacion: operacion,
+            residuo: document.getElementById('dash-filtro-residuo')?.value || 'Todos',
+            mes: document.getElementById('filtro-mes')?.value || 'TODOS'
+          })
+        });
+
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        // Actualizar tarjetas y gráficos con el filtro en memoria
+        actualizarTarjetasKPI(data.kpis_ecologicos, data.totales);
+
+        const tot = data.totales || {};
+        document.getElementById('dash-total-kg').textContent = 
+          Number(tot.total_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Kg';
+        document.getElementById('dash-kg-playo').textContent = Number(tot.kg_playo || 0).toLocaleString();
+        document.getElementById('dash-kg-cono').textContent = Number(tot.kg_cono || 0).toLocaleString();
+        document.getElementById('dash-kg-carton').textContent = Number(tot.kg_carton || 0).toLocaleString();
+        document.getElementById('dash-kg-chatarra').textContent = Number(tot.kg_chatarra || 0).toLocaleString();
+        const pzTarimas = Number(tot.total_tarimas || 0);
+        document.getElementById('dash-total-tarimas').textContent = (pzTarimas * 25).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Kg';
+        document.getElementById('dash-total-pz').textContent = Number(tot.total_pz || 0).toLocaleString();
+
+        const esMonositio2 = Boolean(data.es_monositio || (data.sitios_disponibles && data.sitios_disponibles.length <= 1));
+        renderizarRankings(data.top_mas_generan || [], data.top_menos_generan || [], esMonositio2);
+        renderizarGraficosDashboard(data);
+
+      } catch (err) {
+        console.error("Error al filtrar presentación aislada:", err);
+      }
+    }
+
+    async function cargarMetricasDashboard() {
+      // Si el modo presentación aislada está activo, filtrar exclusivamente en memoria
+      if (window.datosPresentacionAislada) {
+        await filtrarPresentacionAislada();
+        return;
+      }
+      dashboardState.cargando = true;
+      const icon = document.getElementById('icon-recargar-dash');
+      if (icon) icon.classList.add('animate-spin');
+
+      const selectSitio = document.getElementById('dash-filtro-sitio');
+      const sitio = selectSitio ? selectSitio.value : 'Todos';
+      const desde = document.getElementById('dash-filtro-desde')?.value || '';
+      const hasta = document.getElementById('dash-filtro-hasta')?.value || '';
+      const operacion = document.getElementById('dash-filtro-operacion')?.value || 'ENTRADAS';
+      const residuo = document.getElementById('dash-filtro-residuo')?.value || 'Todos';
+
+      const params = new URLSearchParams();
+      if (sitio && sitio !== 'Todos') params.append('sitio', sitio);
+      if (desde) params.append('fecha_inicio', desde);
+      if (hasta) params.append('fecha_fin', hasta);
+      if (operacion && operacion !== 'Ambas') params.append('tipo_operacion', operacion);
+      if (residuo && residuo !== 'Todos') params.append('residuo', residuo);
+      const mes = document.getElementById('filtro-mes')?.value || 'TODOS';
+      if (mes && mes !== 'TODOS') params.append('mes', mes);
+
+      try {
+        const res = await fetch(`${API_BASE}/api/metricas?${params.toString()}`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+
+        // 1. Poblar select de sitios si aún no está poblado
+        if (selectSitio && !dashboardState.sitiosCargados && data.sitios_disponibles) {
+          const valActual = selectSitio.value;
+          selectSitio.innerHTML = '<option value="Todos">Todos los Sitios</option>';
+          data.sitios_disponibles.forEach(s => {
+            const opt = document.createElement('option');
+            opt.value = s;
+            opt.textContent = s;
+            selectSitio.appendChild(opt);
+          });
+          selectSitio.value = valActual;
+          dashboardState.sitiosCargados = true;
+        }
+
+        // 2. Actualizar los 5 KPIs ecológicos
+        actualizarTarjetasKPI(data.kpis_ecologicos, data.totales);
+
+        // 3. Actualizar resumen de volumen y materiales
+        const tot = data.totales || {};
+        document.getElementById('dash-total-kg').textContent = 
+          Number(tot.total_kg || 0).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Kg';
+        document.getElementById('dash-kg-playo').textContent = Number(tot.kg_playo || 0).toLocaleString();
+        document.getElementById('dash-kg-cono').textContent = Number(tot.kg_cono || 0).toLocaleString();
+        document.getElementById('dash-kg-carton').textContent = Number(tot.kg_carton || 0).toLocaleString();
+        document.getElementById('dash-kg-chatarra').textContent = Number(tot.kg_chatarra || 0).toLocaleString();
+        const pzTarimas = Number(tot.total_tarimas || 0);
+        document.getElementById('dash-total-tarimas').textContent = (pzTarimas * 25).toLocaleString('es-MX', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' Kg';
+        document.getElementById('dash-total-pz').textContent = Number(tot.total_pz || 0).toLocaleString();
+
+        // 4. Renderizar Rankings Top 3 más y menos
+        const esMonositio3 = Boolean(data.es_monositio || (data.sitios_disponibles && data.sitios_disponibles.length <= 1));
+        renderizarRankings(data.top_mas_generan || [], data.top_menos_generan || [], esMonositio3);
+
+        // 5. Renderizar Gráficos Chart.js
+        renderizarGraficosDashboard(data);
+
+      } catch (err) {
+        console.error("Error al cargar métricas del dashboard:", err);
+        mostrarNotificacion(`Error al cargar métricas: ${err.message}`, 'error');
+      } finally {
+        dashboardState.cargando = false;
+        if (icon) icon.classList.remove('animate-spin');
+        lucide.createIcons();
+      }
+    }
+
+    function restablecerFiltrosDashboard() {
+      const selectSitio = document.getElementById('dash-filtro-sitio');
+      if (selectSitio) selectSitio.value = 'Todos';
+      const fDesde = document.getElementById('dash-filtro-desde');
+      if (fDesde) fDesde.value = '';
+      const fHasta = document.getElementById('dash-filtro-hasta');
+      if (fHasta) fHasta.value = '';
+      const fOp = document.getElementById('dash-filtro-operacion');
+      if (fOp) fOp.value = 'ENTRADAS';
+      const fRes = document.getElementById('dash-filtro-residuo');
+      if (fRes) fRes.value = 'Todos';
+      const fMes = document.getElementById('filtro-mes');
+      if (fMes) fMes.value = 'TODOS';
+      
+      if (dashboardState.charts.playoMensual) {
+        dashboardState.charts.playoMensual.destroy();
+        dashboardState.charts.playoMensual = null;
+      }
+      if (dashboardState.charts.cartonMensual) {
+        dashboardState.charts.cartonMensual.destroy();
+        dashboardState.charts.cartonMensual = null;
+      }
+      
+      cargarMetricasDashboard();
+      mostrarNotificacion('Filtros del dashboard restablecidos.', 'info');
+    }
+
+    function renderizarRankings(topMas, topMenos, esMonositio = false) {
+      const cMas = document.getElementById('ranking-top-mas');
+      const cMenos = document.getElementById('ranking-top-menos');
+      const titleMas = document.getElementById('title-ranking-top-mas');
+      const subMas = document.getElementById('sub-ranking-top-mas');
+      const titleMenos = document.getElementById('title-ranking-top-menos');
+      const subMenos = document.getElementById('sub-ranking-top-menos');
+      const titlePlayo = document.getElementById('title-playo-distribucion');
+      const subPlayo = document.getElementById('sub-playo-distribucion');
+
+      if (esMonositio) {
+        if (titleMas) titleMas.textContent = "Top Meses de Mayor Generación";
+        if (subMas) subMas.textContent = "Meses con mayor volumen acumulado en el periodo";
+        if (titleMenos) titleMenos.textContent = "Top Meses de Menor Generación";
+        if (subMenos) subMenos.textContent = "Meses con menor concentración de residuos";
+      } else {
+        if (titleMas) titleMas.textContent = "Top 3 Sitios de Mayor Generación";
+        if (subMas) subMas.textContent = "Clientes con mayor volumen recuperado (Kg)";
+        if (titleMenos) titleMenos.textContent = "Top 3 Sitios de Menor Generación";
+        if (subMenos) subMenos.textContent = "Clientes con menor concentración de residuos";
+      }
+      if (titlePlayo) {
+        titlePlayo.innerHTML = `
+          <i data-lucide="pie-chart" class="w-4 h-4 text-pt-blue"></i>
+          <span>Producción de tCO₂e Evitado por Mes</span>
+        `;
+      }
+      if (subPlayo) subPlayo.textContent = "Distribución porcentual y toneladas de CO₂e evitadas por periodo mensual.";
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+
+      const medallasMas = [
+        { bg: 'bg-amber-100 text-amber-800 border-amber-300', num: '1°' },
+        { bg: 'bg-slate-200 text-slate-800 border-slate-300', num: '2°' },
+        { bg: 'bg-orange-100 text-orange-800 border-orange-300', num: '3°' }
+      ];
+
+      if (topMas.length === 0) {
+        cMas.innerHTML = '<p class="text-xs text-slate-400 italic py-4">No hay datos en el periodo seleccionado.</p>';
+      } else {
+        cMas.innerHTML = topMas.map((item, idx) => {
+          const medalla = medallasMas[idx] || { bg: 'bg-slate-100 text-slate-700', num: `${idx+1}°` };
+          const pct = Math.min(100, Math.max(5, item.porcentaje));
+          return `
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg ${medalla.bg} border flex items-center justify-center font-extrabold text-[10px]">
+                    ${medalla.num}
+                  </span>
+                  <span class="font-extrabold text-pt-dark truncate max-w-[200px]" title="${item.mes || item.sitio}">${item.mes || item.sitio}</span>
+                </div>
+                <div class="text-right">
+                  <span class="font-bold text-pt-blue font-mono">${Number(item.kg).toLocaleString()} Kg</span>
+                  <span class="text-[10px] text-slate-400 font-semibold ml-1">(${item.porcentaje}%)</span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-pt-blue to-pt-blueHover h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      if (topMenos.length === 0) {
+        cMenos.innerHTML = '<p class="text-xs text-slate-400 italic py-4">No hay datos en el periodo seleccionado.</p>';
+      } else {
+        cMenos.innerHTML = topMenos.map((item, idx) => {
+          const pct = Math.min(100, Math.max(5, item.porcentaje));
+          return `
+            <div class="p-2.5 rounded-2xl bg-slate-50 border border-slate-100">
+              <div class="flex items-center justify-between text-xs mb-1.5">
+                <div class="flex items-center gap-2">
+                  <span class="w-6 h-6 rounded-lg bg-pt-greenLight text-pt-greenHover border border-pt-green/30 flex items-center justify-center font-extrabold text-[10px]">
+                    ${idx+1}°
+                  </span>
+                  <span class="font-extrabold text-pt-dark truncate max-w-[200px]" title="${item.mes || item.sitio}">${item.mes || item.sitio}</span>
+                </div>
+                <div class="text-right">
+                  <span class="font-bold text-pt-greenHover font-mono">${Number(item.kg).toLocaleString()} Kg</span>
+                  <span class="text-[10px] text-slate-400 font-semibold ml-1">(${item.porcentaje}%)</span>
+                </div>
+              </div>
+              <div class="w-full bg-slate-200 rounded-full h-2 overflow-hidden">
+                <div class="bg-gradient-to-r from-pt-green to-pt-greenHover h-2 rounded-full transition-all duration-500" style="width: ${pct}%"></div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+    }
+
+    function renderizarGraficosDashboard(data) {
+      if (typeof Chart === 'undefined') {
+        console.warn('Chart.js no está disponible en este momento.');
+        return;
+      }
+
+      const k = data.kpis_ecologicos || {};
+
+      // ----------------------------------------------------
+      // Gráfico A: tCO2e Sin emitir vs Árboles sin talar
+      // ----------------------------------------------------
+      const ctx1 = document.getElementById('chart-co2-arboles')?.getContext('2d');
+      if (ctx1) {
+        if (dashboardState.charts.co2Arboles) dashboardState.charts.co2Arboles.destroy();
+        dashboardState.charts.co2Arboles = new Chart(ctx1, {
+          type: 'bar',
+          data: {
+            labels: ['tCO2e Evitado', 'Árboles sin talar'],
+            datasets: [{
+              label: 'Impacto',
+              data: [Number(k.tco2e_sin_emitir || 0), Number(k.arboles_sin_talar || 0)],
+              backgroundColor: ['#0088D6', '#78BE20'],
+              borderRadius: 12,
+              maxBarThickness: 45
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` ${ctx.parsed.y.toLocaleString(undefined, {minimumFractionDigits: 2})} unidades`
+                }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // Gráfico B: Energía (kW/hr) vs Agua protegida (L)
+      // ----------------------------------------------------
+      const ctx2 = document.getElementById('chart-energia-agua')?.getContext('2d');
+      if (ctx2) {
+        if (dashboardState.charts.energiaAgua) dashboardState.charts.energiaAgua.destroy();
+        dashboardState.charts.energiaAgua = new Chart(ctx2, {
+          type: 'bar',
+          data: {
+            labels: ['Energía (kW/hr)', 'Agua (L)'],
+            datasets: [{
+              label: 'Ahorro',
+              data: [Number(k.energia_kwh || 0), Number(k.agua_litros || 0)],
+              backgroundColor: ['#F59E0B', '#06B6D4'],
+              borderRadius: 12,
+              maxBarThickness: 45
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` ${ctx.parsed.y.toLocaleString(undefined, {minimumFractionDigits: 2})}`
+                }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // Gráfico C: Combustible Fósil no consumido
+      // ----------------------------------------------------
+      const ctx3 = document.getElementById('chart-combustible')?.getContext('2d');
+      if (ctx3) {
+        if (dashboardState.charts.combustible) dashboardState.charts.combustible.destroy();
+        dashboardState.charts.combustible = new Chart(ctx3, {
+          type: 'bar',
+          data: {
+            labels: ['Combustible fósil'],
+            datasets: [{
+              label: 'Litros Ahorrados',
+              data: [Number(k.combustible_litros || 0)],
+              backgroundColor: ['#8B5CF6'],
+              borderRadius: 12,
+              maxBarThickness: 50
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              tooltip: {
+                callbacks: {
+                  label: ctx => ` ${ctx.parsed.y.toLocaleString(undefined, {minimumFractionDigits: 2})} Litros`
+                }
+              }
+            },
+            scales: {
+              y: { beginAtZero: true, grid: { color: '#F1F5F9' } },
+              x: { grid: { display: false } }
+            }
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // Gráfico 4: Dona - Producción de tCO₂e Evitado por Mes
+      // ----------------------------------------------------
+      const ctx4 = document.getElementById('chart-playo-distribucion')?.getContext('2d');
+      const tco2eInfo = data.tco2e_evitado_mes || data.volumen_playo_cliente || {};
+      if (ctx4) {
+        if (dashboardState.charts.playoDona) dashboardState.charts.playoDona.destroy();
+        
+        const labelsP = tco2eInfo.labels || [];
+        const dataP = tco2eInfo.data || [];
+        const coloresP = ['#0088D6', '#78BE20', '#38BDF8', '#F59E0B', '#8B5CF6', '#EC4899', '#94A3B8', '#10B981', '#6366F1', '#F43F5E', '#14B8A6', '#F97316'];
+
+        dashboardState.charts.playoDona = new Chart(ctx4, {
+          type: 'doughnut',
+          data: {
+            labels: labelsP.length > 0 ? labelsP : ['Sin registros'],
+            datasets: [{
+              data: dataP.length > 0 ? dataP : [1],
+              backgroundColor: dataP.length > 0 ? coloresP.slice(0, labelsP.length) : ['#E2E8F0'],
+              borderWidth: 2,
+              borderColor: '#FFFFFF'
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '65%',
+            plugins: {
+              legend: {
+                position: 'bottom',
+                labels: {
+                  boxWidth: 10,
+                  font: { size: 10, family: 'Plus Jakarta Sans' },
+                  color: '#475569'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => {
+                    const rawVal = Number(ctx.raw ?? 0);
+                    const dataset = ctx.chart.data.datasets[0];
+                    const total = dataset.data.reduce((acc, curr) => acc + (Number(curr) || 0), 0);
+                    const pct = total > 0 ? ((rawVal / total) * 100).toFixed(1) : (ctx.parsed || 0);
+                    return ` ${ctx.label}: ${rawVal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} tCO2e (${pct}%)`;
+                  }
+                }
+              }
+            }
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // Función auxiliar: Regresión Lineal Simple (y = mx + b)
+      // ----------------------------------------------------
+      function calcularRegresionLineal(series) {
+        const n = series.length;
+        if (n < 2) return [...series];
+        const xVals = Array.from({ length: n }, (_, i) => i);
+        const xMean = xVals.reduce((a, b) => a + b, 0) / n;
+        const yMean = series.reduce((a, b) => a + Number(b), 0) / n;
+        let denom = 0;
+        let numer = 0;
+        for (let i = 0; i < n; i++) {
+          const xDiff = xVals[i] - xMean;
+          const yDiff = Number(series[i]) - yMean;
+          denom += xDiff * xDiff;
+          numer += xDiff * yDiff;
+        }
+        const m = denom !== 0 ? numer / denom : 0;
+        const b = yMean - m * xMean;
+        return xVals.map(x => Number(Math.max(0, m * x + b).toFixed(2)));
+      }
+
+      // ----------------------------------------------------
+      // Función constructora: Gráfico Combinado Doble Eje Y (Áreas + Tendencia)
+      // ----------------------------------------------------
+      function renderizarGraficaDobleEje(canvasId, chartKey, labels, seriesKilos, factorCO2e, labelKg, labelCO2e) {
+        const canvasEl = document.getElementById(canvasId);
+        const ctx = canvasEl?.getContext('2d');
+        if (!ctx) return;
+
+        if (dashboardState.charts[chartKey]) {
+          dashboardState.charts[chartKey].destroy();
+          dashboardState.charts[chartKey] = null;
+        }
+
+        const seriesCO2e = seriesKilos.map(kg => Number(((Number(kg) / 1000.0) * factorCO2e).toFixed(2)));
+        const seriesTendencia = calcularRegresionLineal(seriesKilos);
+
+        dashboardState.charts[chartKey] = new Chart(ctx, {
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: labelKg,
+                data: seriesKilos,
+                type: 'line',
+                yAxisID: 'y',
+                borderColor: '#0088D6',
+                backgroundColor: 'rgba(0, 136, 214, 0.14)',
+                fill: true,
+                tension: 0.35,
+                borderWidth: 2.5,
+                pointRadius: 3,
+                pointBackgroundColor: '#0088D6',
+                order: 2
+              },
+              {
+                label: 'Tendencia Volumen (Kg)',
+                data: seriesTendencia,
+                type: 'line',
+                yAxisID: 'y',
+                borderColor: '#F59E0B',
+                borderDash: [5, 5],
+                borderWidth: 2,
+                fill: false,
+                pointRadius: 0,
+                tension: 0.1,
+                order: 3
+              },
+              {
+                label: labelCO2e,
+                data: seriesCO2e,
+                type: 'line',
+                yAxisID: 'y1',
+                borderColor: '#10B981',
+                backgroundColor: 'rgba(16, 185, 129, 0.14)',
+                fill: true,
+                tension: 0.35,
+                borderWidth: 2.5,
+                pointRadius: 3,
+                pointBackgroundColor: '#10B981',
+                order: 1
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+              mode: 'index',
+              intersect: false
+            },
+            plugins: {
+              legend: {
+                position: 'top',
+                labels: {
+                  boxWidth: 12,
+                  font: { size: 10, family: 'Plus Jakarta Sans', weight: 'bold' },
+                  color: '#334155'
+                }
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => {
+                    const label = ctx.dataset.label || '';
+                    const val = Number(ctx.parsed.y || 0);
+                    if (ctx.dataset.yAxisID === 'y1') {
+                      return ` ${label}: ${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} tCO₂e`;
+                    }
+                    return ` ${label}: ${val.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })} Kg`;
+                  }
+                }
+              }
+            },
+            scales: {
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                beginAtZero: true,
+                grid: { color: '#F1F5F9' },
+                ticks: {
+                  callback: val => `${Number(val).toLocaleString()} Kg`,
+                  color: '#0088D6',
+                  font: { size: 10, weight: 'bold' }
+                },
+                title: {
+                  display: true,
+                  text: 'Kilogramos (Kg)',
+                  color: '#0088D6',
+                  font: { size: 10, weight: 'bold' }
+                }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                beginAtZero: true,
+                grid: { drawOnChartArea: false },
+                ticks: {
+                  callback: val => `${Number(val).toLocaleString(undefined, { minimumFractionDigits: 1, maximumFractionDigits: 2 })} tCO₂e`,
+                  color: '#10B981',
+                  font: { size: 10, weight: 'bold' }
+                },
+                title: {
+                  display: true,
+                  text: 'tCO₂e Evitado',
+                  color: '#10B981',
+                  font: { size: 10, weight: 'bold' }
+                }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { font: { size: 10, weight: 'bold' }, color: '#475569' }
+              }
+            }
+          }
+        });
+      }
+
+      // ----------------------------------------------------
+      // Renderizado Fijo y Simultáneo: Playo y Cartón
+      // ----------------------------------------------------
+      const evolInfo = data.evolucion_mensual || {};
+      const labelsEvol = evolInfo.labels || ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+      
+      let seriesPlayo = evolInfo.series?.Playo || [];
+      if (!seriesPlayo || seriesPlayo.length === 0) {
+        if (data.tendencia_proyeccion?.historico) {
+          seriesPlayo = data.tendencia_proyeccion.historico;
+        }
+      }
+      const seriesCarton = evolInfo.series?.['Cartón'] || evolInfo.series?.Carton || [];
+
+      // 1. Gráfica Superior Derecha: Playo (Factor mitigación 3.5 tCO2e/Ton)
+      renderizarGraficaDobleEje('chartPlayoMensual', 'playoMensual', labelsEvol, seriesPlayo, 3.5, 'Volumen Playo (Kg)', 'CO₂e Evitado (tCO₂e)');
+
+      // 2. Gráfica Inferior (Ancho Completo): Cartón (Factor mitigación 0.852 tCO2e/Ton)
+      renderizarGraficaDobleEje('chartCartonMensual', 'cartonMensual', labelsEvol, seriesCarton, 0.852, 'Volumen Cartón (Kg)', 'CO₂e Evitado (tCO₂e)');
+
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
+    }
+// ----------------------------------------------------
+    // LABORATORIO DE GRÁFICOS INFERENCIALES IA
+    // ----------------------------------------------------
+    function seleccionarPlantillaInferencial(valor) {
+      const input = document.getElementById('input-prompt-inferencial');
+      if (!input) return;
+
+      if (valor === 'proyeccion_95') {
+        input.value = 'Proyecta la tendencia de generación con intervalo de confianza al 95% para los siguientes periodos.';
+      } else if (valor === 'densidad_clientes') {
+        input.value = 'Genera la distribución de probabilidad (KDE) y densidad de volumen de los principales clientes.';
+      } else if (valor === 'anomalias_dispersion') {
+        input.value = 'Detecta anomalías y evalúa la dispersión bivariable entre volumen de Playo y Cono.';
+      } else if (valor === 'personalizado') {
+        input.value = '';
+        input.placeholder = 'Escribe tu consulta analítica personalizada (ej. correlación entre tarimas y playo)...';
+        input.focus();
+      }
+    }
+
+    async function generarGraficoInferencialIA() {
+      const btn = document.getElementById('btn-generar-grafico-ia');
+      const icono = document.getElementById('icono-btn-grafico-ia');
+      const texto = document.getElementById('texto-btn-grafico-ia');
+      const input = document.getElementById('input-prompt-inferencial');
+      const select = document.getElementById('select-plantilla-inferencial');
+
+      const promptTexto = (input?.value || '').trim() || 'Proyecta la tendencia con intervalo de confianza al 95%';
+
+      // Filtros activos en el dashboard
+      const filtroSitio = document.getElementById('dash-filtro-sitio')?.value || '';
+      const filtroDesde = document.getElementById('dash-filtro-desde')?.value || '';
+      const filtroHasta = document.getElementById('dash-filtro-hasta')?.value || '';
+      const filtroOperacion = document.getElementById('dash-filtro-operacion')?.value || '';
+
+      // Estado visual de carga
+      btn.disabled = true;
+      const textoOriginal = texto.innerText;
+      texto.innerText = 'Analizando con IA...';
+      if (icono) icono.classList.add('animate-spin');
+
+      try {
+        const payload = {
+          prompt: promptTexto,
+          sitio: filtroSitio || null,
+          fecha_inicio: filtroDesde || null,
+          fecha_fin: filtroHasta || null,
+          tipo_operacion: filtroOperacion || null
+        };
+
+        if (window.datosPresentacionAislada) {
+          payload.modo_presentacion = true;
+          payload.session_id = window.datosPresentacionAislada.session_id;
+          payload.datos_aislados = window.datosPresentacionAislada.records || window.datosPresentacionAislada;
+        }
+
+        const resp = await fetch('/api/generar-grafico-ia', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!resp.ok) {
+          const errData = await resp.json().catch(() => ({}));
+          throw new Error(errData.detail || `Error del servidor HTTP ${resp.status}`);
+        }
+
+        const data = await resp.json();
+
+        // Desplegar resultados
+        const estadoVacio = document.getElementById('estado-vacio-grafico-ia');
+        const estadoActivo = document.getElementById('estado-activo-grafico-ia');
+        const img = document.getElementById('img-grafico-ia');
+        const badgeMetodo = document.getElementById('badge-metodo-ia');
+        const contenedorInterpretacion = document.getElementById('texto-interpretacion-ia');
+
+        if (img && data.imagen_base64) {
+          img.src = data.imagen_base64;
+        }
+
+        if (badgeMetodo) {
+          const metodoDesc = data.metodo === 'gpt-4o' ? 'GPT-4o & Matplotlib' : 'Motor Analítico SciPy (Fallback)';
+          badgeMetodo.innerHTML = `<i data-lucide="cpu" class="w-3 h-3"></i><span>${metodoDesc}</span>`;
+        }
+
+        if (contenedorInterpretacion) {
+          const bullets = Array.isArray(data.interpretacion) && data.interpretacion.length > 0 
+            ? data.interpretacion 
+            : [
+                "El modelo inferencial ha analizado los datos disponibles de los registros de Supabase.",
+                "Se observan patrones de comportamiento de volumen dentro del rango histórico parametrizado.",
+                "La distribución permite prever continuidad operativa bajo los intervalos estadísticos estimados."
+              ];
+          
+          contenedorInterpretacion.innerHTML = bullets.map(b => `
+            <div class="flex items-start gap-2.5 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+              <span class="w-2 h-2 rounded-full bg-pt-blue mt-1.5 shrink-0"></span>
+              <p class="text-xs text-slate-700 leading-snug">${b}</p>
+            </div>
+          `).join('');
+        }
+
+        estadoVacio?.classList.add('hidden');
+        estadoActivo?.classList.remove('hidden');
+        lucide.createIcons();
+
+        // Scroll suave hacia los resultados
+        estadoActivo?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+      } catch (err) {
+        console.error('Error al generar gráfico inferencial:', err);
+        alert(`No fue posible generar el gráfico inferencial: ${err.message}`);
+      } finally {
+        btn.disabled = false;
+        texto.innerText = textoOriginal;
+        if (icono) icono.classList.remove('animate-spin');
+        lucide.createIcons();
+      }
+    }
+
+    function descargarGraficoIA() {
+      const img = document.getElementById('img-grafico-ia');
+      if (!img || !img.src) return;
+      const enlace = document.createElement('a');
+      enlace.href = img.src;
+      enlace.download = `Plastic_Trade_Grafico_Inferencial_${new Date().toISOString().slice(0, 10)}.png`;
+      document.body.appendChild(enlace);
+      enlace.click();
+      document.body.removeChild(enlace);
+    }
+
+    // ----------------------------------------------------
+    // ASISTENTE IA ANALÍTICO (OPENAI GPT-4O-MINI)
+    // ----------------------------------------------------
+    function abrirChatIA() {
+      const drawer = document.getElementById('drawer-chat-ia');
+      drawer.classList.remove('hidden');
+      lucide.createIcons();
+      setTimeout(() => {
+        document.getElementById('input-chat-ia')?.focus();
+      }, 100);
+    }
+
+    function cerrarChatIA() {
+      document.getElementById('drawer-chat-ia').classList.add('hidden');
+    }
+
+    function usarPreguntaSugerida(btn) {
+      const input = document.getElementById('input-chat-ia');
+      if (input) {
+        input.value = btn.textContent.trim();
+        enviarMensajeIA(null);
+      }
+    }
+
+    function formatMarkdownChat(text) {
+      if (!text) return '';
+      let safe = escapeHtml(text);
+      // Negritas **texto**
+      safe = safe.replace(/\*\*(.*?)\*\*/g, '<strong class="font-bold text-pt-dark">$1</strong>');
+      // Cursivas *texto*
+      safe = safe.replace(/\*(.*?)\*/g, '<em class="italic">$1</em>');
+      // Listas numeradas o con viñetas
+      safe = safe.replace(/^[•\-\*]\s+(.*)$/gm, '<li class="ml-3 list-disc">$1</li>');
+      safe = safe.replace(/^\d+\.\s+(.*)$/gm, '<li class="ml-3 list-decimal">$1</li>');
+      // Saltos de línea
+      safe = safe.replace(/\n\n/g, '<br/><br/>').replace(/\n/g, '<br/>');
+      return safe;
+    }
+
+    async function enviarMensajeIA(e) {
+      if (e) e.preventDefault();
+      const input = document.getElementById('input-chat-ia');
+      const btnEnviar = document.querySelector('#form-chat-ia button[type="submit"]');
+      const texto = input ? input.value.trim() : '';
+      if (!texto) return;
+
+      const historial = document.getElementById('chat-historial');
+
+      // 1. Burbuja del usuario
+      const userBubble = document.createElement('div');
+      userBubble.className = "flex items-start justify-end gap-2.5 animate-in fade-in duration-200";
+      userBubble.innerHTML = `
+        <div class="bg-pt-blue text-white rounded-2xl rounded-tr-sm p-3 shadow-sm max-w-[85%] leading-relaxed font-medium">
+          ${escapeHtml(texto)}
+        </div>
+        <div class="w-7 h-7 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center shrink-0 mt-0.5 font-bold text-[10px]">
+          TÚ
+        </div>
+      `;
+      historial.appendChild(userBubble);
+      input.value = '';
+      input.disabled = true;
+      if (btnEnviar) btnEnviar.disabled = true;
+      historial.scrollTop = historial.scrollHeight;
+
+      // 2. Estado de carga adaptativo (Supabase o Modo Presentación Aislada)
+      const textoCargaChat = window.datosPresentacionAislada 
+        ? "Consultando datos temporales de presentación aislada..." 
+        : "Consultando registros en Supabase...";
+
+      const loadingBubble = document.createElement('div');
+      loadingBubble.id = "chat-ia-loading";
+      loadingBubble.className = "flex items-start gap-2.5 animate-pulse";
+      loadingBubble.innerHTML = `
+        <div class="w-7 h-7 rounded-xl ${window.datosPresentacionAislada ? 'bg-emerald-600' : 'bg-pt-blue'} text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5 animate-spin"></i>
+        </div>
+        <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-3 text-slate-600 shadow-sm text-xs flex items-center gap-2">
+          <span class="inline-block w-2 h-2 rounded-full ${window.datosPresentacionAislada ? 'bg-emerald-500' : 'bg-pt-blue'} animate-ping"></span>
+          <span class="font-medium">${textoCargaChat}</span>
+        </div>
+      `;
+      historial.appendChild(loadingBubble);
+      lucide.createIcons();
+      historial.scrollTop = historial.scrollHeight;
+
+      // 3. Petición POST /api/asistente-ia
+      try {
+        const payloadChat = { pregunta: texto };
+        if (window.datosPresentacionAislada) {
+          payloadChat.modo_presentacion = true;
+          payloadChat.session_id = window.datosPresentacionAislada.session_id;
+          payloadChat.datos_aislados = window.datosPresentacionAislada.records || window.datosPresentacionAislada;
+        }
+
+        const res = await fetch(`${API_BASE}/api/asistente-ia`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payloadChat)
+        });
+
+        const loadingElem = document.getElementById('chat-ia-loading');
+        if (loadingElem) loadingElem.remove();
+
+        if (!res.ok) {
+          let errorMsg = "Error al consultar el asistente IA. Verifica la conexión con el servidor.";
+          try {
+            const errData = await res.json();
+            if (errData && errData.detail) errorMsg = errData.detail;
+          } catch(err) {}
+          throw new Error(errorMsg);
+        }
+
+        const data = await res.json();
+        const respuestaBot = data.respuesta || "No se recibió respuesta del modelo.";
+
+        // 4. Renderizar respuesta del Asistente
+        const botBubble = document.createElement('div');
+        botBubble.className = "flex items-start gap-2.5 animate-in fade-in duration-200";
+        botBubble.innerHTML = `
+          <div class="w-7 h-7 rounded-xl bg-pt-blue text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-3.5 text-slate-700 shadow-sm max-w-[85%] leading-relaxed text-xs">
+            ${formatMarkdownChat(respuestaBot)}
+          </div>
+        `;
+        historial.appendChild(botBubble);
+
+      } catch (error) {
+        const loadingElem = document.getElementById('chat-ia-loading');
+        if (loadingElem) loadingElem.remove();
+
+        const errorBubble = document.createElement('div');
+        errorBubble.className = "flex items-start gap-2.5 animate-in fade-in duration-200";
+        errorBubble.innerHTML = `
+          <div class="w-7 h-7 rounded-xl bg-rose-500 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
+            <i data-lucide="alert-circle" class="w-3.5 h-3.5"></i>
+          </div>
+          <div class="bg-rose-50 border border-rose-200 rounded-2xl rounded-tl-sm p-3 text-rose-700 shadow-sm max-w-[85%] leading-relaxed text-xs font-medium">
+            Error al consultar el asistente IA. Verifica la conexión con el servidor.
+          </div>
+        `;
+        historial.appendChild(errorBubble);
+      } finally {
+        input.disabled = false;
+        if (btnEnviar) btnEnviar.disabled = false;
+        input.focus();
+        lucide.createIcons();
+        historial.scrollTop = historial.scrollHeight;
+      }
+    }
+
+    // ----------------------------------------------------
+    // CONTROL DEL MÓDULO 03: DATOS HISTÓRICOS Y AUDITORÍA
+    // ----------------------------------------------------
+    const historicoState = {
+      cargando: false,
+      registros: [],
+      registrosFiltrados: [],
+      claveEliminarPendiente: null
+    };
+
+    async function cargarHistorico() {
+      historicoState.cargando = true;
+      const tbody = document.getElementById('tbody-historico');
+      const icon = document.getElementById('icon-recargar-hist');
+      if (icon) icon.classList.add('animate-spin');
+
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="10" class="px-6 py-12 text-center text-slate-400">
+            <i data-lucide="loader-2" class="w-6 h-6 animate-spin mx-auto mb-2 text-pt-blue"></i>
+            <span>Consultando registros históricos en Supabase...</span>
+          </td>
+        </tr>
+      `;
+      lucide.createIcons();
+
+      try {
+        const res = await fetch(`${API_BASE}/api/historico`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        
+        historicoState.registros = data.registros || [];
+        filtrarHistoricoLocal();
+      } catch (err) {
+        console.error("Error al cargar histórico:", err);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" class="px-6 py-12 text-center text-rose-500 font-medium">
+              <i data-lucide="alert-triangle" class="w-6 h-6 mx-auto mb-2 text-rose-500"></i>
+              <span>Error al conectar con la base de datos (${err.message}). Verifica que el servidor backend esté encendido.</span>
+            </td>
+          </tr>
+        `;
+        document.getElementById('contador-historico-texto').textContent = 'Error al cargar registros';
+        lucide.createIcons();
+      } finally {
+        historicoState.cargando = false;
+        if (icon) icon.classList.remove('animate-spin');
+      }
+    }
+
+    function recargarHistorico() {
+      cargarHistorico();
+      mostrarNotificacion('Actualizando historial de registros...', 'info');
+    }
+
+    function limpiarFiltrosHistorico() {
+      document.getElementById('filtro-hist-desde').value = '';
+      document.getElementById('filtro-hist-hasta').value = '';
+      document.getElementById('filtro-hist-residuo').value = 'Todos';
+      document.getElementById('filtro-hist-operacion').value = 'Todas';
+      document.getElementById('filtro-hist-sitio').value = '';
+      filtrarHistoricoLocal();
+      mostrarNotificacion('Filtros reiniciados.', 'info');
+    }
+
+    function filtrarHistoricoLocal() {
+      const desde = document.getElementById('filtro-hist-desde').value;
+      const hasta = document.getElementById('filtro-hist-hasta').value;
+      const residuo = document.getElementById('filtro-hist-residuo').value;
+      const operacion = document.getElementById('filtro-hist-operacion').value;
+      const sitio = document.getElementById('filtro-hist-sitio').value.trim().toLowerCase();
+
+      historicoState.registrosFiltrados = historicoState.registros.filter(r => {
+        if (desde && r.fecha < desde) return false;
+        if (hasta && r.fecha > hasta) return false;
+        if (residuo && residuo !== 'Todos' && (r.tipo_residuo || '').toLowerCase() !== residuo.toLowerCase()) return false;
+        if (operacion && operacion !== 'Todas' && (r.tipo_operacion || '').toUpperCase() !== operacion.toUpperCase()) return false;
+        if (sitio && !(r.sitio && r.sitio.toLowerCase().includes(sitio))) return false;
+        return true;
+      });
+
+      renderizarTablaHistorico();
+    }
+
+    function renderizarTablaHistorico() {
+      const tbody = document.getElementById('tbody-historico');
+      const items = historicoState.registrosFiltrados;
+      const totalOriginal = historicoState.registros.length;
+
+      const totalKg = items.reduce((acc, r) => acc + (Number(r.kg) || 0), 0);
+      const totalPz = items.reduce((acc, r) => acc + (Number(r.pz) || 0), 0);
+      const totalTarimas = items.reduce((acc, r) => acc + (Number(r.tarimas) || 0), 0);
+
+      document.getElementById('contador-historico-texto').innerHTML = 
+        `Mostrando <span class="text-pt-blue font-extrabold">${items.length}</span> de ${totalOriginal} registros`;
+
+      document.getElementById('metricas-historico-pills').innerHTML = `
+        <span class="px-2.5 py-1 rounded-lg bg-pt-blueLight/60 text-pt-blue font-bold">
+          Total Kg: ${totalKg.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-amber-50 text-amber-700 font-bold border border-amber-200/50">
+          Total Tarimas: ${totalTarimas.toLocaleString()}
+        </span>
+        <span class="px-2.5 py-1 rounded-lg bg-pt-greenLight/60 text-pt-greenHover font-bold">
+          Total Pz: ${totalPz.toLocaleString()}
+        </span>
+      `;
+
+      if (items.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="10" class="px-6 py-12 text-center text-slate-400 italic">
+              <i data-lucide="inbox" class="w-7 h-7 mx-auto mb-2 text-slate-300"></i>
+              No se encontraron registros que coincidan con los filtros seleccionados.
+            </td>
+          </tr>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      tbody.innerHTML = '';
+      items.forEach((r, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = idx % 2 === 1 
+          ? 'bg-slate-50/50 hover:bg-pt-blueLight/15 transition-colors' 
+          : 'bg-white hover:bg-pt-blueLight/15 transition-colors';
+
+        const isEntrada = (r.tipo_operacion || '').toUpperCase() === 'ENTRADAS';
+        const badgeOp = isEntrada 
+          ? '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-pt-blueLight text-pt-blue uppercase tracking-wider">ENTRADA</span>'
+          : '<span class="inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-pt-greenLight text-pt-greenHover uppercase tracking-wider">SALIDA</span>';
+
+        tr.innerHTML = `
+          <td class="px-3.5 py-2.5 text-center font-mono text-slate-600">${r.fecha || '-'}</td>
+          <td class="px-3 py-2.5 text-center">${badgeOp}</td>
+          <td class="px-4 py-2.5 font-bold text-pt-dark">${escapeHtml(r.sitio || 'General')}</td>
+          <td class="px-3.5 py-2.5">
+            <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-semibold text-[11px] ${getCategoriaBadgeStyle(r.tipo_residuo)}">
+              ${r.tipo_residuo || 'Otro'}
+            </span>
+          </td>
+          <td class="px-3.5 py-2.5 text-right font-mono font-semibold ${r.kg > 0 ? 'text-pt-blue' : 'text-slate-400'}">
+            ${Number(r.kg).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+          </td>
+          <td class="px-3.5 py-2.5 text-right font-mono ${r.pz > 0 ? 'text-slate-800 font-semibold' : 'text-slate-400'}">
+            ${Number(r.pz).toLocaleString()}
+          </td>
+          <td class="px-3.5 py-2.5 text-right font-mono ${r.tarimas > 0 ? 'text-amber-600 font-bold' : 'text-slate-400'}">
+            ${Number(r.tarimas).toLocaleString()}
+          </td>
+          <td class="px-4 py-2.5 text-slate-600 truncate max-w-[180px]" title="${escapeHtml(r.archivo_nombre || '')}">
+            <div class="flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
+              <span class="truncate font-medium">${escapeHtml(r.archivo_nombre || 'Excel cargado')}</span>
+            </div>
+          </td>
+          <td class="px-3.5 py-2.5 text-center text-slate-500 font-mono text-[11px]">
+            ${formatTimestamp(r.creado_en)}
+          </td>
+          <td class="px-3 py-2.5 text-center">
+            <button 
+              type="button"
+              onclick="solicitarEliminarRegistro('${escapeQuotes(r.clave_duplicado)}', '${escapeQuotes(r.fecha)} | ${escapeQuotes(r.sitio)} | ${escapeQuotes(r.tipo_residuo)} | ${r.kg} kg | ${r.pz} pz')"
+              class="w-7 h-7 mx-auto rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 flex items-center justify-center transition-colors"
+              title="Eliminar este registro de Supabase"
+            >
+              <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      lucide.createIcons();
+    }
+
+    function formatTimestamp(isoStr) {
+      if (!isoStr) return '-';
+      try {
+        const d = new Date(isoStr);
+        if (isNaN(d.getTime())) return isoStr.slice(0, 16).replace('T', ' ');
+        return d.toLocaleDateString('es-MX', {
+          day: '2-digit', month: '2-digit', year: 'numeric',
+          hour: '2-digit', minute: '2-digit'
+        });
+      } catch (e) {
+        return isoStr.slice(0, 16);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      return String(text)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function escapeQuotes(text) {
+      if (!text) return '';
+      return String(text).replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    }
+
+    function solicitarEliminarRegistro(claveDuplicado, detalle) {
+      historicoState.claveEliminarPendiente = claveDuplicado;
+      document.getElementById('modal-eliminar-detalle').innerHTML = `
+        ¿Estás seguro de eliminar el siguiente movimiento?<br>
+        <strong class="text-pt-dark block mt-1.5 p-2 rounded-xl bg-slate-100 font-mono text-[11px]">${detalle}</strong>
+      `;
+      document.getElementById('modal-eliminar').classList.remove('hidden');
+      lucide.createIcons();
+    }
+
+    function cerrarModalEliminar() {
+      historicoState.claveEliminarPendiente = null;
+      document.getElementById('modal-eliminar').classList.add('hidden');
+    }
+
+    // Inicializar listener de confirmación de eliminación
+    window.addEventListener('DOMContentLoaded', () => {
+      const btnConf = document.getElementById('btn-confirmar-eliminar');
+      if (btnConf) {
+        btnConf.onclick = async () => {
+          const clave = historicoState.claveEliminarPendiente;
+          if (!clave) return;
+
+          btnConf.disabled = true;
+          btnConf.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i><span>Eliminando...</span>`;
+          lucide.createIcons();
+
+          try {
+            const res = await fetch(`${API_BASE}/api/historico/${encodeURIComponent(clave)}`, {
+              method: 'DELETE'
+            });
+            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            
+            historicoState.registros = historicoState.registros.filter(r => r.clave_duplicado !== clave);
+            filtrarHistoricoLocal();
+            cerrarModalEliminar();
+            mostrarNotificacion('Registro eliminado exitosamente de la base de datos.', 'exito');
+          } catch (e) {
+            alert(`No se pudo eliminar el registro: ${e.message}`);
+          } finally {
+            btnConf.disabled = false;
+            btnConf.innerHTML = `<span>Sí, eliminar registro</span>`;
+            lucide.createIcons();
+          }
+        };
+      }
+    });
+
+    function descargarExcelHistorico() {
+      const items = historicoState.registrosFiltrados;
+      if (!items || items.length === 0) {
+        mostrarNotificacion('No hay registros históricos visibles para exportar.', 'aviso');
+        return;
+      }
+
+      const dataExport = items.map(r => ({
+        "Fecha Movimiento": r.fecha || "",
+        "Operación": r.tipo_operacion || "",
+        "Sitio / Cliente": r.sitio || "",
+        "Tipo de Residuo": r.tipo_residuo || "",
+        "Kg": Number(r.kg) || 0,
+        "Pz": Number(r.pz) || 0,
+        "Tarimas": Number(r.tarimas) || 0,
+        "Archivo Origen": r.archivo_nombre || "",
+        "Fecha de Carga": formatTimestamp(r.creado_en)
+      }));
+
+      const ws = XLSX.utils.json_to_sheet(dataExport);
+      ws['!cols'] = [
+        { wch: 14 },
+        { wch: 12 },
+        { wch: 28 },
+        { wch: 18 },
+        { wch: 14 },
+        { wch: 12 },
+        { wch: 12 },
+        { wch: 35 },
+        { wch: 20 }
+      ];
+
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Histórico Residuos");
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      XLSX.writeFile(wb, `Historico_PlasticTrade_${stamp}.xlsx`);
+      mostrarNotificacion(`Se exportaron ${items.length} registros a Excel con éxito.`, 'exito');
+    }
+
+    function descargarCSVHistorico() {
+      const items = historicoState.registrosFiltrados;
+      if (!items || items.length === 0) {
+        mostrarNotificacion('No hay registros históricos visibles para exportar.', 'aviso');
+        return;
+      }
+
+      const headers = ["Fecha Movimiento", "Operación", "Sitio / Cliente", "Tipo de Residuo", "Kg", "Pz", "Tarimas", "Archivo Origen", "Fecha de Carga"];
+      const rows = items.map(r => [
+        r.fecha || "",
+        r.tipo_operacion || "",
+        `"${(r.sitio || "").replace(/"/g, '""')}"`,
+        r.tipo_residuo || "",
+        r.kg,
+        r.pz,
+        r.tarimas,
+        `"${(r.archivo_nombre || "").replace(/"/g, '""')}"`,
+        `"${formatTimestamp(r.creado_en)}"`
+      ]);
+
+      const csvContent = "\uFEFF" + [headers.join(","), ...rows.map(e => e.join(","))].join("\r\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const stamp = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+      link.setAttribute("href", url);
+      link.setAttribute("download", `Historico_PlasticTrade_${stamp}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      mostrarNotificacion(`Descarga de CSV histórico completada.`, 'exito');
+    }
+
+    // ----------------------------------------------------
+    // MANEJO DE ARCHIVOS MÚLTIPLES POR FUENTE
+    // ----------------------------------------------------
+    function archivosSeleccionados(fuente, input) {
+      if (input.files && input.files.length > 0) {
+        agregarArchivos(fuente, Array.from(input.files));
+        input.value = ""; // Permite seleccionar el mismo archivo si es necesario
+      }
+    }
+
+    function agregarArchivos(fuente, nuevosArchivos) {
+      appState.usarPrueba = false;
+      
+      nuevosArchivos.forEach(file => {
+        // Evitar duplicados exactos en la misma caja
+        const yaExiste = appState.archivos[fuente].some(f => f.name === file.name && f.size === file.size);
+        if (!yaExiste) {
+          appState.archivos[fuente].push(file);
+        }
+      });
+
+      renderizarListaArchivos(fuente);
+      actualizarContadorTotal();
+    }
+
+    function removerArchivoIndividual(fuente, index) {
+      appState.archivos[fuente].splice(index, 1);
+      renderizarListaArchivos(fuente);
+      actualizarContadorTotal();
+    }
+
+    function limpiarFuente(fuente) {
+      appState.archivos[fuente] = [];
+      renderizarListaArchivos(fuente);
+      actualizarContadorTotal();
+    }
+
+    function renderizarListaArchivos(fuente) {
+      const fileListDiv = document.getElementById(`filelist-${fuente}`);
+      const tag = document.getElementById(`tag-${fuente}`);
+      const btnClear = document.getElementById(`btn-clear-${fuente}`);
+      const box = document.getElementById(`box-${fuente}`);
+      const files = appState.archivos[fuente];
+
+      fileListDiv.innerHTML = "";
+
+      if (!files || files.length === 0) {
+        fileListDiv.innerHTML = `<span class="text-xs text-slate-400 italic block">Sin archivos adjuntos</span>`;
+        tag.textContent = "0 archivos";
+        tag.className = "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-slate-100 text-slate-500";
+        btnClear.classList.add('hidden');
+        box.classList.remove('border-pt-green');
+        box.classList.add('border-slate-200');
+        return;
+      }
+
+      // Con archivos
+      tag.textContent = `${files.length} archivo${files.length > 1 ? 's' : ''}`;
+      tag.className = "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700";
+      btnClear.classList.remove('hidden');
+      box.classList.add('border-pt-green');
+      box.classList.remove('border-slate-200');
+
+      files.forEach((f, idx) => {
+        const item = document.createElement('div');
+        item.className = "flex items-center justify-between gap-1.5 px-2 py-1 bg-slate-50 border border-slate-200/80 rounded-lg text-[11px] group/item hover:bg-white transition-colors";
+        
+        const sizeKb = (f.size / 1024).toFixed(0);
+        item.innerHTML = `
+          <div class="truncate flex items-center gap-1.5 flex-1 min-w-0" title="${f.name}">
+            <i data-lucide="file-check" class="w-3 h-3 text-pt-green flex-shrink-0"></i>
+            <span class="font-medium text-slate-700 truncate">${f.name}</span>
+            <span class="text-[10px] text-slate-400 flex-shrink-0">(${sizeKb} KB)</span>
+          </div>
+          <button 
+            type="button" 
+            onclick="removerArchivoIndividual('${fuente}', ${idx})" 
+            class="p-0.5 text-slate-400 hover:text-rose-500 rounded transition-colors"
+            title="Quitar este archivo"
+          >
+            <i data-lucide="x" class="w-3 h-3"></i>
+          </button>
+        `;
+        fileListDiv.appendChild(item);
+      });
+
+      lucide.createIcons();
+    }
+
+    function actualizarContadorTotal() {
+      const fuentesRequeridas = appState.tipoOperacion === 'ENTRADAS' 
+        ? ['almacen', 'sostenibilidad', 'uziel']
+        : ['facturacion'];
+
+      let totalArchivos = 0;
+      let fuentesConArchivos = 0;
+
+      fuentesRequeridas.forEach(f => {
+        const cant = (appState.archivos[f] || []).length;
+        if (cant > 0) {
+          fuentesConArchivos++;
+          totalArchivos += cant;
+        }
+      });
+
+      document.getElementById('contador-archivos').textContent = 
+        `${totalArchivos} archivo${totalArchivos !== 1 ? 's' : ''} (${fuentesConArchivos} de ${fuentesRequeridas.length} fuentes cubiertas)`;
+    }
+
+    // ----------------------------------------------------
+    // SOPORTE DRAG & DROP POR CAJA
+    // ----------------------------------------------------
+    function dragOverBox(event, fuente) {
+      event.preventDefault();
+      document.getElementById(`box-${fuente}`).classList.add('drag-over');
+    }
+
+    function dragLeaveBox(event, fuente) {
+      event.preventDefault();
+      document.getElementById(`box-${fuente}`).classList.remove('drag-over');
+    }
+
+    function dropBox(event, fuente) {
+      event.preventDefault();
+      const box = document.getElementById(`box-${fuente}`);
+      box.classList.remove('drag-over');
+
+      if (event.dataTransfer && event.dataTransfer.files) {
+        const files = Array.from(event.dataTransfer.files).filter(f => 
+          f.name.endsWith('.xlsx') || f.name.endsWith('.xls')
+        );
+        if (files.length > 0) {
+          agregarArchivos(fuente, files);
+        } else {
+          mostrarNotificacion("Por favor arrastra únicamente archivos Excel (.xlsx, .xls)", "error");
+        }
+      }
+    }
+
+    // Modo rápido con Excels oficiales de prueba
+    function usarArchivosPrueba() {
+      appState.usarPrueba = true;
+      mostrarNotificacion(
+        "Modo de prueba activado: Al presionar 'Procesar y Homologar Lote' se leerán automáticamente los Excels de prueba de 'Documentos de prueba'.", 
+        "info"
+      );
+
+      const fuentes = appState.tipoOperacion === 'ENTRADAS' 
+        ? ['almacen', 'sostenibilidad', 'uziel']
+        : ['facturacion'];
+
+      fuentes.forEach(f => {
+        const tag = document.getElementById(`tag-${f}`);
+        tag.textContent = "Prueba";
+        tag.className = "text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-100 text-amber-800";
+        const fileListDiv = document.getElementById(`filelist-${f}`);
+        fileListDiv.innerHTML = `
+          <div class="px-2 py-1 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 font-semibold flex items-center gap-1.5">
+            <i data-lucide="check" class="w-3 h-3 text-amber-700"></i>
+            <span>Archivo oficial de prueba</span>
+          </div>
+        `;
+      });
+      document.getElementById('contador-archivos').textContent = "Archivos de prueba configurados";
+      lucide.createIcons();
+    }
+
+    // ----------------------------------------------------
+    // LLAMADA AL BACKEND (/api/procesar) CON MANEJO DE ERRORES Y CORS
+    // ----------------------------------------------------
+    async function enviarAProcesar() {
+      const btn = document.getElementById('btn-procesar');
+      const originalHTML = btn.innerHTML;
+
+      // Validar si hay archivos cargados o modo de prueba
+      const totalArchivosCargados = Object.values(appState.archivos).reduce((acc, arr) => acc + arr.length, 0);
+      if (totalArchivosCargados === 0 && !appState.usarPrueba) {
+        mostrarNotificacion("Por favor adjunta al menos un archivo Excel en alguna de las fuentes o haz clic en 'Usar Excels de Prueba'.", "error");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = `<span class="inline-block animate-spin w-4 h-4 border-2 border-white border-t-transparent rounded-full mr-2"></span> Procesando e Ingestando en Supabase...`;
+      mostrarNotificacion(`Conectando con backend (${API_BASE}). Procesando archivos, deduplicando por SHA-256 e ingestado en Supabase...`, "info");
+
+      try {
+        const formData = new FormData();
+        const operacionActual = appState.tipoOperacion || 'ENTRADAS';
+        formData.append("tipo_operacion", operacionActual);
+        formData.append("usar_archivos_prueba", appState.usarPrueba ? "true" : "false");
+
+        if (operacionActual === 'SALIDAS') {
+          // Empaquetar archivos de Facturación bajo la clave 'facturacion'
+          const archivosFacturacion = appState.archivos.facturacion || [];
+          archivosFacturacion.forEach(file => {
+            formData.append('facturacion', file);
+          });
+          // Fallback por si el usuario cargó en alguna otra fuente mientras estaba en modo salidas
+          for (const [fuente, fileList] of Object.entries(appState.archivos)) {
+            if (fuente !== 'facturacion' && Array.isArray(fileList)) {
+              fileList.forEach(file => {
+                formData.append('facturacion', file);
+                formData.append('archivos', file);
+              });
+            }
+          }
+        } else {
+          // ENTRADAS: empaquetar almacen, sostenibilidad, uziel
+          (appState.archivos.almacen || []).forEach(f => formData.append('almacen', f));
+          (appState.archivos.sostenibilidad || []).forEach(f => formData.append('sostenibilidad', f));
+          (appState.archivos.uziel || []).forEach(f => formData.append('uziel', f));
+          (appState.archivos.facturacion || []).forEach(f => formData.append('facturacion', f));
+        }
+
+        const endpoint = `${API_BASE}/api/procesar`;
+        const response = await fetch(endpoint, {
+          method: "POST",
+          body: formData
+        });
+
+        if (!response.ok) {
+          let errorMsg = `Error HTTP ${response.status}`;
+          try {
+            const errData = await response.json();
+            errorMsg = errData.detail || errorMsg;
+          } catch(e) {}
+          throw new Error(errorMsg);
+        }
+
+        const data = await response.json();
+        
+        // Guardar registros en memoria y poblar tabla
+        appState.registros = data.registros || [];
+        appState.registrosFiltrados = [...appState.registros];
+        appState.salidasDetalle = data.salidas_detalle || [];
+        appState.salidasDetalleFiltrados = [...appState.salidasDetalle];
+
+        // Mostrar resumen KPIs
+        mostrarKPIs(data);
+
+        // Renderizar tabla dinámica (9 cols para SALIDAS, 6 cols para ENTRADAS)
+        renderizarTabla();
+
+        const cantReg = appState.tipoOperacion === 'SALIDAS' 
+          ? (appState.salidasDetalle.length) 
+          : (appState.registros.length);
+
+        mostrarNotificacion(
+          `¡Procesamiento exitoso! Se procesaron ${data.total_archivos || 1} archivo(s), homologando ${cantReg} registros y sincronizándolos con Supabase.`, 
+          "success"
+        );
+
+      } catch (err) {
+        console.error("Error al procesar:", err);
+        let mensajeUsuario = err.message;
+        if (err.name === 'TypeError' || err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
+          mensajeUsuario = `No se pudo conectar con el servidor backend. Asegúrate de que el servidor esté activo y accesible en la red.`;
+        }
+        mostrarNotificacion(mensajeUsuario, "error");
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHTML;
+        lucide.createIcons();
+      }
+    }
+
+    // ----------------------------------------------------
+    // RENDERIZADO DE RESULTADOS, KPIS Y TABLA
+    // ----------------------------------------------------
+    function mostrarKPIs(data) {
+      document.getElementById('kpi-container').classList.remove('hidden');
+      document.getElementById('kpi-total-filas').textContent = Number(data.total_registros).toLocaleString();
+      document.getElementById('kpi-total-kg').textContent = Number(data.total_kg).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+      document.getElementById('kpi-total-pz').textContent = Number(data.total_pz).toLocaleString();
+      document.getElementById('kpi-total-tarimas').textContent = Number(data.total_tarimas).toLocaleString();
+
+      const pillsContainer = document.getElementById('pills-categorias');
+      pillsContainer.innerHTML = '';
+
+      const cats = data.resumen_categorias || {};
+      for (const [catName, metrics] of Object.entries(cats)) {
+        if (metrics.filas > 0) {
+          const pill = document.createElement('div');
+          pill.className = "inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white border border-slate-200 text-slate-700 shadow-sm";
+          pill.innerHTML = `
+            <span class="w-2 h-2 rounded-full ${getColorDot(catName)}"></span>
+            <span class="font-bold text-pt-dark">${catName}:</span>
+            <span>${metrics.filas} filas • ${metrics.kg.toLocaleString()} kg • ${metrics.pz.toLocaleString()} pz</span>
+          `;
+          pillsContainer.appendChild(pill);
+        }
+      }
+    }
+
+    function getColorDot(cat) {
+      switch(cat) {
+        case 'Playo': return 'bg-pt-blue';
+        case 'Cono': return 'bg-pt-green';
+        case 'Cartón': return 'bg-amber-500';
+        case 'Chatarra': return 'bg-slate-500';
+        case 'Tarima': return 'bg-indigo-500';
+        case 'Madera': return 'bg-orange-500';
+        default: return 'bg-slate-400';
+      }
+    }
+
+    function renderizarTabla() {
+      const section = document.getElementById('section-tabla-previa');
+      const thead = document.getElementById('thead-registros');
+      const tbody = document.getElementById('tbody-registros');
+      section.classList.remove('hidden');
+      tbody.innerHTML = '';
+
+      if (appState.tipoOperacion === 'SALIDAS') {
+        const tit = document.getElementById('titulo-tabla-previa');
+        if (tit) tit.textContent = "Vista Previa de Salidas (Desglose de Facturación: Producto, Cono y Playo)";
+
+        // Encabezado oficial dinámico de 9 columnas para SALIDAS
+        thead.innerHTML = `
+          <tr class="divide-x divide-slate-200 font-bold border-b border-slate-200 uppercase text-[11px] tracking-wider bg-emerald-50/80 text-emerald-950">
+            <th class="px-3.5 py-3 text-center w-28">Fecha Entrega</th>
+            <th class="px-3 py-3 text-center w-24">Status</th>
+            <th class="px-4 py-3">Sitio</th>
+            <th class="px-4 py-3">Especificación</th>
+            <th class="px-3.5 py-3 text-right w-24">Piezas</th>
+            <th class="px-3.5 py-3 text-right w-28">Peso Unitario (Kg)</th>
+            <th class="px-3.5 py-3 text-right w-32">Peso Producto (Kg)</th>
+            <th class="px-3.5 py-3 text-right w-28">Peso Cono (Kg)</th>
+            <th class="px-3.5 py-3 text-right w-28">Peso Playo (Kg)</th>
+          </tr>
+        `;
+
+        const items = appState.salidasDetalleFiltrados || [];
+        document.getElementById('info-mostrando-filas').textContent = 
+          `Mostrando ${items.length} de ${(appState.salidasDetalle || []).length} entregas procesadas`;
+
+        if (items.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="9" class="px-4 py-8 text-center text-slate-400 italic">
+                No hay entregas que coincidan con la búsqueda.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        items.forEach((r, idx) => {
+          const tr = document.createElement('tr');
+          tr.className = idx % 2 === 1 ? 'bg-slate-50/50 hover:bg-pt-greenLight/20 transition-colors' : 'bg-white hover:bg-pt-greenLight/20 transition-colors';
+          tr.innerHTML = `
+            <td class="px-3.5 py-2.5 text-center font-mono text-slate-600">${r['Fecha Entrega'] || ''}</td>
+            <td class="px-3 py-2.5 text-center">
+              <span class="inline-flex items-center px-2 py-0.5 rounded-md font-semibold text-[10px] uppercase bg-emerald-100 text-emerald-800">
+                ${r['Status'] || 'Entregado'}
+              </span>
+            </td>
+            <td class="px-4 py-2.5 font-medium text-pt-dark">${r['Sitio'] || ''}</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-slate-600">${r['Especificación'] || ''}</td>
+            <td class="px-3.5 py-2.5 text-right font-mono font-semibold text-slate-800">
+              ${Number(r['Piezas']).toLocaleString()}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono text-slate-600">
+              ${Number(r['Peso Unitario (Kg)']).toFixed(2)}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono font-semibold text-pt-blue">
+              ${Number(r['Peso Producto (Kg)']).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono text-amber-700">
+              ${Number(r['Peso Cono (Kg)']).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono font-bold text-pt-greenHover">
+              ${Number(r['Peso Playo (Kg)']).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+      } else {
+        const tit = document.getElementById('titulo-tabla-previa');
+        if (tit) tit.textContent = "Vista Previa Consolidada (Fecha, Sitio, Tipo de Residuo, Kg, Pz, Tarimas)";
+
+        // Encabezado estándar de 6 columnas para ENTRADAS
+        thead.innerHTML = `
+          <tr class="divide-x divide-slate-200 font-bold border-b border-slate-200 uppercase text-[11px] tracking-wider">
+            <th class="px-3.5 py-3 text-center w-28">Fecha</th>
+            <th class="px-4 py-3">Sitio</th>
+            <th class="px-4 py-3">Tipo de Residuo</th>
+            <th class="px-3.5 py-3 text-right w-28">Kg</th>
+            <th class="px-3.5 py-3 text-right w-24">Pz</th>
+            <th class="px-3.5 py-3 text-right w-24">Tarimas</th>
+          </tr>
+        `;
+
+        const items = appState.registrosFiltrados || [];
+        document.getElementById('info-mostrando-filas').textContent = 
+          `Mostrando ${items.length} de ${(appState.registros || []).length} registros homologados`;
+
+        if (items.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="px-4 py-8 text-center text-slate-400 italic">
+                No hay registros que coincidan con la búsqueda.
+              </td>
+            </tr>
+          `;
+          return;
+        }
+
+        items.forEach((r, idx) => {
+          const tr = document.createElement('tr');
+          tr.className = idx % 2 === 1 ? 'bg-slate-50/50 hover:bg-pt-blueLight/20 transition-colors' : 'bg-white hover:bg-pt-blueLight/20 transition-colors';
+          tr.innerHTML = `
+            <td class="px-3.5 py-2.5 text-center font-mono text-slate-600">${r.Fecha || ''}</td>
+            <td class="px-4 py-2.5 font-medium text-pt-dark">${r.Sitio || ''}</td>
+            <td class="px-4 py-2.5">
+              <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md font-semibold text-[11px] ${getCategoriaBadgeStyle(r['Tipo de Residuo'])}">
+                ${r['Tipo de Residuo'] || ''}
+              </span>
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono font-semibold ${r.Kg > 0 ? 'text-pt-blue' : 'text-slate-400'}">
+              ${Number(r.Kg).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono ${r.Pz > 0 ? 'text-slate-800 font-semibold' : 'text-slate-400'}">
+              ${Number(r.Pz).toLocaleString()}
+            </td>
+            <td class="px-3.5 py-2.5 text-right font-mono ${r.Tarimas > 0 ? 'text-amber-600 font-bold' : 'text-slate-400'}">
+              ${Number(r.Tarimas).toLocaleString()}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    function getCategoriaBadgeStyle(cat) {
+      switch(cat) {
+        case 'Playo': return 'bg-sky-50 text-sky-700 border border-sky-200/60';
+        case 'Cono': return 'bg-emerald-50 text-emerald-700 border border-emerald-200/60';
+        case 'Cartón': return 'bg-amber-50 text-amber-700 border border-amber-200/60';
+        case 'Chatarra': return 'bg-slate-100 text-slate-700 border border-slate-200';
+        case 'Tarima': return 'bg-indigo-50 text-indigo-700 border border-indigo-200/60';
+        case 'Madera': return 'bg-orange-50 text-orange-700 border border-orange-200/60';
+        default: return 'bg-slate-100 text-slate-600';
+      }
+    }
+
+    function filtrarTabla() {
+      const q = document.getElementById('filtro-tabla').value.trim().toLowerCase();
+      if (appState.tipoOperacion === 'SALIDAS') {
+        if (!q) {
+          appState.salidasDetalleFiltrados = [...(appState.salidasDetalle || [])];
+        } else {
+          appState.salidasDetalleFiltrados = (appState.salidasDetalle || []).filter(r => 
+            (r['Sitio'] && r['Sitio'].toLowerCase().includes(q)) ||
+            (r['Especificación'] && r['Especificación'].toLowerCase().includes(q)) ||
+            (r['Fecha Entrega'] && r['Fecha Entrega'].toLowerCase().includes(q)) ||
+            (r['Status'] && r['Status'].toLowerCase().includes(q))
+          );
+        }
+      } else {
+        if (!q) {
+          appState.registrosFiltrados = [...(appState.registros || [])];
+        } else {
+          appState.registrosFiltrados = (appState.registros || []).filter(r => 
+            (r.Sitio && r.Sitio.toLowerCase().includes(q)) ||
+            (r['Tipo de Residuo'] && r['Tipo de Residuo'].toLowerCase().includes(q)) ||
+            (r.Fecha && r.Fecha.toLowerCase().includes(q))
+          );
+        }
+      }
+      renderizarTabla();
+    }
+
+    // ----------------------------------------------------
+    // EXPORTACIÓN A EXCEL Y CSV (ADAPTABLE ENTRADAS/SALIDAS)
+    // ----------------------------------------------------
+    function descargarExcelConsolidado() {
+      const fechaStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+
+      if (appState.tipoOperacion === 'SALIDAS') {
+        if (!appState.salidasDetalle || appState.salidasDetalle.length === 0) {
+          mostrarNotificacion("No hay datos de salidas para exportar.", "error");
+          return;
+        }
+
+        const rows = appState.salidasDetalle.map(r => ({
+          "Fecha Entrega": r["Fecha Entrega"],
+          "Status": r["Status"],
+          "Sitio": r["Sitio"],
+          "Especificación": r["Especificación"],
+          "Piezas": r["Piezas"],
+          "Peso Unitario (Kg)": r["Peso Unitario (Kg)"],
+          "Peso Producto (Kg)": r["Peso Producto (Kg)"],
+          "Peso Cono (Kg)": r["Peso Cono (Kg)"],
+          "Peso Playo (Kg)": r["Peso Playo (Kg)"]
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        worksheet["!cols"] = [
+          { wch: 14 }, // Fecha Entrega
+          { wch: 12 }, // Status
+          { wch: 28 }, // Sitio
+          { wch: 24 }, // Especificación
+          { wch: 12 }, // Piezas
+          { wch: 18 }, // Peso Unitario (Kg)
+          { wch: 18 }, // Peso Producto (Kg)
+          { wch: 16 }, // Peso Cono (Kg)
+          { wch: 16 }  // Peso Playo (Kg)
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Concentrado_Salidas");
+
+        const fileName = `Concentrado_Salidas_Facturacion_${fechaStr}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+        mostrarNotificacion(`Concentrado de Salidas descargado: ${fileName}`, "success");
+
+      } else {
+        if (!appState.registros || appState.registros.length === 0) {
+          mostrarNotificacion("No hay datos consolidados para exportar.", "error");
+          return;
+        }
+
+        const rows = appState.registros.map(r => ({
+          "Fecha": r.Fecha,
+          "Sitio": r.Sitio,
+          "Tipo de Residuo": r["Tipo de Residuo"],
+          "Kg": r.Kg,
+          "Pz": r.Pz,
+          "Tarimas": r.Tarimas
+        }));
+
+        const worksheet = XLSX.utils.json_to_sheet(rows);
+        worksheet["!cols"] = [
+          { wch: 14 }, // Fecha
+          { wch: 26 }, // Sitio
+          { wch: 18 }, // Tipo de Residuo
+          { wch: 14 }, // Kg
+          { wch: 12 }, // Pz
+          { wch: 12 }  // Tarimas
+        ];
+
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, "Concentrado_Entradas");
+
+        const fileName = `Concentrado_Entradas_${fechaStr}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+        mostrarNotificacion(`Concentrado de Entradas descargado: ${fileName}`, "success");
+      }
+    }
+
+    function descargarCSVConsolidado() {
+      const fechaStr = new Date().toISOString().slice(0, 10).replace(/-/g, "");
+
+      if (appState.tipoOperacion === 'SALIDAS') {
+        if (!appState.salidasDetalle || appState.salidasDetalle.length === 0) {
+          mostrarNotificacion("No hay datos de salidas para exportar.", "error");
+          return;
+        }
+
+        const headers = ["Fecha Entrega", "Status", "Sitio", "Especificación", "Piezas", "Peso Unitario (Kg)", "Peso Producto (Kg)", "Peso Cono (Kg)", "Peso Playo (Kg)"];
+        const csvLines = [headers.join(",")];
+
+        appState.salidasDetalle.forEach(r => {
+          const row = [
+            `"${r['Fecha Entrega'] || ''}"`,
+            `"${r['Status'] || 'Entregado'}"`,
+            `"${(r['Sitio'] || '').replace(/"/g, '""')}"`,
+            `"${(r['Especificación'] || '').replace(/"/g, '""')}"`,
+            r['Piezas'],
+            r['Peso Unitario (Kg)'],
+            r['Peso Producto (Kg)'],
+            r['Peso Cono (Kg)'],
+            r['Peso Playo (Kg)']
+          ];
+          csvLines.push(row.join(","));
+        });
+
+        const blob = new Blob(["\uFEFF" + csvLines.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Concentrado_Salidas_Facturacion_${fechaStr}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        mostrarNotificacion("Archivo CSV de Salidas descargado correctamente.", "success");
+
+      } else {
+        if (!appState.registros || appState.registros.length === 0) {
+          mostrarNotificacion("No hay datos consolidados para exportar.", "error");
+          return;
+        }
+
+        const headers = ["Fecha", "Sitio", "Tipo de Residuo", "Kg", "Pz", "Tarimas"];
+        const csvLines = [headers.join(",")];
+
+        appState.registros.forEach(r => {
+          const row = [
+            `"${r.Fecha || ''}"`,
+            `"${(r.Sitio || '').replace(/"/g, '""')}"`,
+            `"${(r['Tipo de Residuo'] || '').replace(/"/g, '""')}"`,
+            r.Kg,
+            r.Pz,
+            r.Tarimas
+          ];
+          csvLines.push(row.join(","));
+        });
+
+        const blob = new Blob(["\uFEFF" + csvLines.join("\n")], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Concentrado_Entradas_${fechaStr}.csv`;
+        a.click();
+        URL.revokeObjectURL(url);
+        mostrarNotificacion("Archivo CSV descargado correctamente.", "success");
+      }
+    }
+
+    // ----------------------------------------------------
+    // NOTIFICACIONES FLOTANTES EN PANTALLA
+    // ----------------------------------------------------
+    function mostrarNotificacion(mensaje, tipo = "info") {
+      const container = document.getElementById('status-container');
+      const box = document.getElementById('status-box');
+      const text = document.getElementById('status-text');
+      const icon = document.getElementById('status-icon');
+
+      container.classList.remove('hidden');
+      text.textContent = mensaje;
+
+      if (tipo === 'success') {
+        box.className = "p-4 rounded-2xl flex items-center gap-3 text-sm bg-emerald-50 text-emerald-800 border border-emerald-200";
+        icon.setAttribute('data-lucide', 'check-circle-2');
+      } else if (tipo === 'error') {
+        box.className = "p-4 rounded-2xl flex items-center gap-3 text-sm bg-rose-50 text-rose-800 border border-rose-200";
+        icon.setAttribute('data-lucide', 'alert-circle');
+      } else {
+        box.className = "p-4 rounded-2xl flex items-center gap-3 text-sm bg-sky-50 text-sky-800 border border-sky-200";
+        icon.setAttribute('data-lucide', 'info');
+      }
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>

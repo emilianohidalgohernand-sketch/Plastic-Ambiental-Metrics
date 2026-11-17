@@ -1,0 +1,36 @@
+# Entorno virtual
+venv/
+.venv/
+env/
+ENV/
+
+# Variables de entorno y secretos
+.env
+.env.*
+!.env.example
+Documentacio*.txt
+*.txt
+!requirements.txt
+
+# Bytecode y caches de Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Archivos ejecutables y binarios
+*.exe
+cloudflared.exe
+
+# Sistema operativo
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+
+# Logs y temporales
+*.log
+tmp/
+temp/
